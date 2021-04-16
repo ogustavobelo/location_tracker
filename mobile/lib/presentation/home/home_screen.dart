@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:location_tracker/core/data_injection/injectable.dart';
+import 'package:location_tracker/data/models/location_model.dart';
+import 'package:location_tracker/presentation/shared/controller/app_controller.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -6,35 +10,38 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _counter = 0;
-
-  void _incrementCounter() async {}
+  final _appController = getIt<AppController>();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Home Screen'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
+    return Observer(
+      builder: (context) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('Home Screen'),
+          ),
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  '${_appController.location?.latitude ?? 'nulo'}',
+                ),
+                Text(
+                  '${_appController.location?.longitude ?? 'nulo'}',
+                ),
+              ],
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () async {
+              _appController.setLocation();
+            },
+            tooltip: 'Increment',
+            child: Icon(Icons.add),
+          ),
+        );
+      }, // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

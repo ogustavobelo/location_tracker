@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:injectable/injectable.dart';
 import 'package:location/location.dart';
 import 'package:location_tracker/core/error/failures.dart';
 import 'package:location_tracker/core/success/success.dart';
@@ -6,6 +7,7 @@ import 'package:location_tracker/domain/entities/location_entity.dart'
     as entity;
 import 'package:location_tracker/domain/repositories/location_repository.dart';
 
+@Injectable(as: LocationRepository)
 class LocationRepositoryImpl implements LocationRepository {
   @override
   Future<Either<Failure, entity.Location>> getCurrentLocation() async {
