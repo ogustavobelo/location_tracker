@@ -11,8 +11,16 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # Core
+  dartz: 0.10.0-nullsafety.1
+  equatable: ^2.0.0
+
+  # Theme
   cupertino_icons: ^1.0.2
   google_fonts: ^2.0.0
+
+  # GPS
+  location: ^4.1.1
 
 dev_dependencies:
   flutter_test:

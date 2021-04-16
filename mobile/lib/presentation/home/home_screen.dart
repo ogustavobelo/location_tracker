@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:location_tracker/data/repositories/location_repository_impl.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -8,11 +9,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _counter = 0;
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+  void _incrementCounter() async {}
 
   @override
   Widget build(BuildContext context) {
