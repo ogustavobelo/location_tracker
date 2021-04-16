@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:location_tracker/data/repositories/location_repository_impl.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
