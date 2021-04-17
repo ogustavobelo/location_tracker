@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:location_tracker/domain/entities/vehicle_enum.dart';
 
 import 'location_entity.dart';
 
@@ -19,5 +20,3 @@ class User extends Equatable {
   @override
   List<Object?> get props => [uid];
 }
-
-enum Vehicle { car, truck, bike, moto, unknown }

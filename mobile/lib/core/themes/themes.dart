@@ -11,6 +11,7 @@ class Themes {
     backgroundColor: AppColors.pureWhite,
     scaffoldBackgroundColor: AppColors.lightBlueGrey,
     errorColor: AppColors.mediumRed,
+    hintColor: AppColors.mediumBlueGrey,
     buttonTheme: ButtonThemeData(
       textTheme: ButtonTextTheme.primary,
       buttonColor: AppColors.lightBlue,

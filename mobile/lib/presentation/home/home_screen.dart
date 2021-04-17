@@ -4,6 +4,7 @@ import 'package:location_tracker/core/data_injection/injectable.dart';
 import 'package:location_tracker/core/error/exceptions.dart';
 import 'package:location_tracker/core/helpers/i18n_helper.dart';
 import 'package:location_tracker/core/notifications/notification_service.dart';
+import 'package:location_tracker/presentation/home/components/vehicle_picker_component.dart';
 import 'package:location_tracker/presentation/shared/components/location_loading_component.dart';
 import 'package:location_tracker/presentation/shared/controller/app_controller.dart';
 
@@ -44,22 +45,23 @@ class _HomeScreenState extends State<HomeScreen> {
         return Scaffold(
           appBar: AppBar(
             title: Text(_translate("appBarTitle")),
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            elevation: 0.0,
           ),
-          body: Center(
-            child: _appController.loading
-                ? LocationLoading()
-                : Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        '${_appController.location?.latitude ?? 'empty'}',
-                      ),
-                      Text(
-                        '${_appController.location?.longitude ?? 'empty'}',
-                      ),
-                    ],
-                  ),
-          ),
+          body: _appController.loading
+              ? LocationLoading()
+              : ListView(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  shrinkWrap: true,
+                  children: <Widget>[
+                    Text(
+                      _translate("chooseVehicle"),
+                      style: Theme.of(context).textTheme.headline6,
+                      textAlign: TextAlign.center,
+                    ),
+                    VehiclePicker(),
+                  ],
+                ),
           floatingActionButton: FloatingActionButton(
             onPressed: _appController.loading
                 ? null

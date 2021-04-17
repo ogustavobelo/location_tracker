@@ -1,2 +1,9 @@
 home:
-  appBarTitle: Home Screen
+  appBarTitle: Create your profile
+  chooseVehicle: Choose your Vehicle
+vehicles:
+  car: Car
+  moto: Motocycle
+  truck: Truck
+  bike: Bicycle
+  unknown: Unknown
