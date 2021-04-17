@@ -1,5 +1,10 @@
+import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
-import 'package:location_tracker/data/models/location_model.dart';
+import 'package:location_tracker/core/error/exceptions.dart';
+import 'package:location_tracker/core/error/failures.dart';
+import 'package:location_tracker/core/logger/logger.dart';
+import 'package:location_tracker/core/success/success.dart';
+import 'package:location_tracker/domain/entities/location_entity.dart';
 import 'package:location_tracker/domain/usecases/get_current_location_usecase.dart';
 import 'package:location_tracker/domain/usecases/request_location_service_usecase.dart';
 import 'package:location_tracker/domain/usecases/request_permission_usecase.dart';
@@ -11,24 +16,73 @@ part 'app_controller.g.dart';
 class AppController = _AppControllerBase with _$AppController;
 
 abstract class _AppControllerBase with Store {
+  final Logger logger;
   final GetCurrentLocation getCurrentLocation;
-  final RequestLocationService requestLocationService;
-  final RequestPermission requestPermission;
+  final RequestLocationService requestLocationServiceUseCase;
+  final RequestPermission requestPermissionUseCase;
 
   _AppControllerBase({
+    required this.logger,
     required this.getCurrentLocation,
-    required this.requestLocationService,
-    required this.requestPermission,
+    required this.requestLocationServiceUseCase,
+    required this.requestPermissionUseCase,
   });
 
   @observable
-  LocationModel? location;
+  Location? location;
+
+  @observable
+  bool hasPermission = false;
+
+  @observable
+  bool locationServiceEnabled = false;
 
   @action
   Future<void> setLocation() async {
-    final usecase = await getCurrentLocation();
-    usecase.fold((error) => throw error, (result) {
-      location = LocationModel.byEntity(result);
-    });
+    try {
+      final usecase = await getCurrentLocation();
+      usecase.fold(
+        (error) => throw error,
+        (result) {
+          location = result;
+        },
+      );
+    } catch (e) {
+      logger.print("Error on setLocation $e", className: "AppController");
+      throw LocationException("Unable to set current location");
+    }
+  }
+
+  @action
+  Future<void> requestPermission() async {
+    try {
+      final Either<Failure, Success> useCase = await requestPermissionUseCase();
+      useCase.fold(
+        (error) => throw error,
+        (_) => hasPermission = true,
+      );
+    } catch (e) {
+      logger.print("Error on Request Permission $e",
+          className: "AppController");
+      hasPermission = false;
+      throw LocationException("Location Permission not allowed");
+    }
+  }
+
+  @action
+  Future<void> requestServiceLocation() async {
+    try {
+      final Either<Failure, Success> useCase =
+          await requestLocationServiceUseCase();
+      useCase.fold(
+        (error) => throw error,
+        (_) => locationServiceEnabled = true,
+      );
+    } catch (e) {
+      logger.print("Error on requestServiceLocation $e",
+          className: "AppController");
+      locationServiceEnabled = false;
+      throw LocationException("Location Permission not allowed");
+    }
   }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:location_tracker/core/data_injection/injectable.dart';
-import 'package:location_tracker/data/models/location_model.dart';
 import 'package:location_tracker/presentation/shared/controller/app_controller.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -11,6 +10,16 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _appController = getIt<AppController>();
+
+  @override
+  void initState() {
+    _initPermissions();
+    super.initState();
+  }
+
+  void _initPermissions() {
+    try {} catch (e) {}
+  }
 
   @override
   Widget build(BuildContext context) {
