@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:location_tracker/core/data_injection/injectable.dart';
 import 'package:location_tracker/core/error/exceptions.dart';
 import 'package:location_tracker/core/notifications/notification_service.dart';
+import 'package:location_tracker/presentation/shared/components/location_loading_component.dart';
 import 'package:location_tracker/presentation/shared/controller/app_controller.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -41,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           body: Center(
             child: _appController.loading
-                ? CircularProgressIndicator()
+                ? LocationLoading()
                 : Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -60,8 +61,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 : () async {
                     _appController.setLocation();
                   },
-            tooltip: 'Increment',
-            child: Icon(Icons.add),
+            tooltip: 'Get Current Location',
+            backgroundColor: Theme.of(context).primaryColor,
+            child: Icon(Icons.pin_drop_sharp),
           ),
         );
       }, // This trailing comma makes auto-formatting nicer for build methods.
