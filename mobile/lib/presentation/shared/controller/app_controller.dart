@@ -37,9 +37,28 @@ abstract class _AppControllerBase with Store {
   @observable
   bool locationServiceEnabled = false;
 
+  @observable
+  bool loading = false;
+
+  @observable
+  String loadingMessage = "";
+
+  @action
+  void startLoading({String message = "Loading"}) {
+    loading = true;
+    loadingMessage = message;
+  }
+
+  @action
+  void stopLoading() {
+    loading = false;
+    loadingMessage = "";
+  }
+
   @action
   Future<void> setLocation() async {
     try {
+      startLoading(message: "Retrieving your current location...");
       final usecase = await getCurrentLocation();
       usecase.fold(
         (error) => throw error,
@@ -50,6 +69,8 @@ abstract class _AppControllerBase with Store {
     } catch (e) {
       logger.print("Error on setLocation $e", className: "AppController");
       throw LocationException("Unable to set current location");
+    } finally {
+      stopLoading();
     }
   }
 

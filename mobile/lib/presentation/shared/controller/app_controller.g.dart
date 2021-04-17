@@ -56,6 +56,36 @@ mixin _$AppController on _AppControllerBase, Store {
     });
   }
 
+  final _$loadingAtom = Atom(name: '_AppControllerBase.loading');
+
+  @override
+  bool get loading {
+    _$loadingAtom.reportRead();
+    return super.loading;
+  }
+
+  @override
+  set loading(bool value) {
+    _$loadingAtom.reportWrite(value, super.loading, () {
+      super.loading = value;
+    });
+  }
+
+  final _$loadingMessageAtom = Atom(name: '_AppControllerBase.loadingMessage');
+
+  @override
+  String get loadingMessage {
+    _$loadingMessageAtom.reportRead();
+    return super.loadingMessage;
+  }
+
+  @override
+  set loadingMessage(String value) {
+    _$loadingMessageAtom.reportWrite(value, super.loadingMessage, () {
+      super.loadingMessage = value;
+    });
+  }
+
   final _$setLocationAsyncAction =
       AsyncAction('_AppControllerBase.setLocation');
 
@@ -81,12 +111,39 @@ mixin _$AppController on _AppControllerBase, Store {
         .run(() => super.requestServiceLocation());
   }
 
+  final _$_AppControllerBaseActionController =
+      ActionController(name: '_AppControllerBase');
+
+  @override
+  void startLoading({String message = "Loading"}) {
+    final _$actionInfo = _$_AppControllerBaseActionController.startAction(
+        name: '_AppControllerBase.startLoading');
+    try {
+      return super.startLoading(message: message);
+    } finally {
+      _$_AppControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void stopLoading() {
+    final _$actionInfo = _$_AppControllerBaseActionController.startAction(
+        name: '_AppControllerBase.stopLoading');
+    try {
+      return super.stopLoading();
+    } finally {
+      _$_AppControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
 location: ${location},
 hasPermission: ${hasPermission},
-locationServiceEnabled: ${locationServiceEnabled}
+locationServiceEnabled: ${locationServiceEnabled},
+loading: ${loading},
+loadingMessage: ${loadingMessage}
     ''';
   }
 }

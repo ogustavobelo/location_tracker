@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:location_tracker/core/data_injection/injectable.dart';
+import 'package:location_tracker/core/error/exceptions.dart';
+import 'package:location_tracker/core/notifications/notification_service.dart';
 import 'package:location_tracker/presentation/shared/controller/app_controller.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -17,8 +19,16 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
   }
 
-  void _initPermissions() {
-    try {} catch (e) {}
+  void _initPermissions() async {
+    try {
+      await _appController.requestServiceLocation();
+      await _appController.requestPermission();
+      _appController.setLocation();
+    } catch (e) {
+      final _errorMessage =
+          e is LocationException ? e.message : "Unable to get Permissions";
+      AppNotifications.showToastError(_errorMessage);
+    }
   }
 
   @override
@@ -30,22 +40,26 @@ class _HomeScreenState extends State<HomeScreen> {
             title: Text('Home Screen'),
           ),
           body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  '${_appController.location?.latitude ?? 'nulo'}',
-                ),
-                Text(
-                  '${_appController.location?.longitude ?? 'nulo'}',
-                ),
-              ],
-            ),
+            child: _appController.loading
+                ? CircularProgressIndicator()
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        '${_appController.location?.latitude ?? 'empty'}',
+                      ),
+                      Text(
+                        '${_appController.location?.longitude ?? 'empty'}',
+                      ),
+                    ],
+                  ),
           ),
           floatingActionButton: FloatingActionButton(
-            onPressed: () async {
-              _appController.setLocation();
-            },
+            onPressed: _appController.loading
+                ? null
+                : () async {
+                    _appController.setLocation();
+                  },
             tooltip: 'Increment',
             child: Icon(Icons.add),
           ),
