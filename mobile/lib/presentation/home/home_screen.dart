@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:location_tracker/core/data_injection/injectable.dart';
 import 'package:location_tracker/core/error/exceptions.dart';
+import 'package:location_tracker/core/helpers/i18n_helper.dart';
 import 'package:location_tracker/core/notifications/notification_service.dart';
 import 'package:location_tracker/presentation/shared/components/location_loading_component.dart';
 import 'package:location_tracker/presentation/shared/controller/app_controller.dart';
@@ -32,13 +33,17 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  String _translate(String key) {
+    return I18nHelper.translate(context, "home.$key");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Observer(
       builder: (context) {
         return Scaffold(
           appBar: AppBar(
-            title: Text('Home Screen'),
+            title: Text(_translate("appBarTitle")),
           ),
           body: Center(
             child: _appController.loading
