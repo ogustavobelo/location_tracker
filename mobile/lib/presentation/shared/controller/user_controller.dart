@@ -1,5 +1,4 @@
 import 'package:injectable/injectable.dart';
-import 'package:location_tracker/domain/entities/user_entity.dart';
 import 'package:location_tracker/domain/entities/vehicle_enum.dart';
 import 'package:mobx/mobx.dart';
 
