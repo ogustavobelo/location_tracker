@@ -1,1 +1,1 @@
-enum Vehicle { car, truck, bike, moto, unknown }
+enum Vehicle { car, truck, police_car, bus, unknown }

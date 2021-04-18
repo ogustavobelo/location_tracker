@@ -30,15 +30,17 @@ class VehicleButton extends StatelessWidget {
         height: _size,
         padding: const EdgeInsets.all(8.0),
         duration: const Duration(milliseconds: 250),
+        clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8.0),
+          borderRadius: BorderRadius.circular(12.0),
           color: selected!
               ? Theme.of(context).primaryColor.withOpacity(.25)
               : Colors.transparent,
           border: Border.all(
-            color:
-                selected! ? Theme.of(context).primaryColor : Colors.transparent,
-            width: 2,
+            color: selected!
+                ? Theme.of(context).primaryColorDark
+                : Colors.transparent,
+            width: 4,
           ),
         ),
         child: Column(
@@ -49,7 +51,10 @@ class VehicleButton extends StatelessWidget {
                 fit: BoxFit.contain,
               ),
             ),
-            Text(_translate(context, "$_vehicle"))
+            Text(
+              _translate(context, "$_vehicle"),
+              textAlign: TextAlign.center,
+            )
           ],
         ),
       ),

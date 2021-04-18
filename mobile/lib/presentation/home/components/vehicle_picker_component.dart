@@ -9,8 +9,8 @@ class VehiclePicker extends StatelessWidget {
   final _userController = getIt<UserController>();
   final List<Vehicle> _vehicles = [
     Vehicle.car,
-    Vehicle.bike,
-    Vehicle.moto,
+    Vehicle.police_car,
+    Vehicle.bus,
     Vehicle.truck
   ];
   @override

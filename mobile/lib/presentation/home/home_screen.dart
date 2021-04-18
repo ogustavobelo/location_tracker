@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:location_tracker/core/constants/fonts.dart';
 import 'package:location_tracker/core/data_injection/injectable.dart';
 import 'package:location_tracker/core/error/exceptions.dart';
 import 'package:location_tracker/core/helpers/i18n_helper.dart';
 import 'package:location_tracker/core/notifications/notification_service.dart';
 import 'package:location_tracker/presentation/home/components/vehicle_picker_component.dart';
+import 'package:location_tracker/presentation/shared/components/hard_edge_button.dart';
+import 'package:location_tracker/presentation/shared/components/hard_edge_textfield.dart';
 import 'package:location_tracker/presentation/shared/components/location_loading_component.dart';
 import 'package:location_tracker/presentation/shared/controller/app_controller.dart';
 
@@ -26,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       await _appController.requestServiceLocation();
       await _appController.requestPermission();
-      _appController.setLocation();
+      // await _appController.setLocation();
     } catch (e) {
       final _errorMessage =
           e is LocationException ? e.message : "Unable to get Permissions";
@@ -54,24 +57,43 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   shrinkWrap: true,
                   children: <Widget>[
+                    Row(
+                      children: [
+                        Text('Nick'),
+                        const SizedBox(width: 8.0),
+                        Expanded(
+                          child: HardEdgeTextField(
+                            controller: TextEditingController(),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16.0),
                     Text(
                       _translate("chooseVehicle"),
-                      style: Theme.of(context).textTheme.headline6,
+                      style: TextStyle(
+                          fontFamily: Fonts.pressStart, color: Colors.black),
                       textAlign: TextAlign.center,
                     ),
+                    const SizedBox(height: 8.0),
                     VehiclePicker(),
+                    const SizedBox(height: 16.0),
+                    HardEdgeButton(
+                      text: 'CREATE',
+                      onPressed: () {},
+                    ),
                   ],
                 ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: _appController.loading
-                ? null
-                : () async {
-                    _appController.setLocation();
-                  },
-            tooltip: 'Get Current Location',
-            backgroundColor: Theme.of(context).primaryColor,
-            child: Icon(Icons.pin_drop_sharp),
-          ),
+          // floatingActionButton: FloatingActionButton(
+          //   onPressed: _appController.loading
+          //       ? null
+          //       : () async {
+          //           _appController.setLocation();
+          //         },
+          //   tooltip: 'Get Current Location',
+          //   backgroundColor: Theme.of(context).primaryColor,
+          //   child: Icon(Icons.pin_drop_sharp),
+          // ),
         );
       }, // This trailing comma makes auto-formatting nicer for build methods.
     );

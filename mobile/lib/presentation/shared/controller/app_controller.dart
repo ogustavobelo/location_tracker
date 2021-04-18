@@ -67,7 +67,7 @@ abstract class _AppControllerBase with Store {
         },
       );
     } catch (e) {
-      logger.print("Error on setLocation $e", className: "AppController");
+      // logger.print("Error on setLocation $e", className: "AppController");
       throw LocationException("Unable to set current location");
     } finally {
       stopLoading();

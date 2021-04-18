@@ -11,6 +11,6 @@ abstract class Logger extends Equatable {
 class LocalLogger extends Logger {
   @override
   void print(String log, {String className = "LocalLogger"}) {
-    print("$className - $log");
+    // print("$className - $log");
   }
 }

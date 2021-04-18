@@ -12,7 +12,10 @@ class LocationRepositoryImpl implements LocationRepository {
   @override
   Future<Either<Failure, entity.Location>> getCurrentLocation() async {
     try {
-      final LocationData currentLocation = await Location().getLocation();
+      final LocationData currentLocation = await Location()
+          .getLocation()
+          .timeout(Duration(seconds: 10),
+              onTimeout: () => throw LocationFailure());
       return right(entity.Location(
         latitude: currentLocation.latitude!,
         longitude: currentLocation.longitude!,

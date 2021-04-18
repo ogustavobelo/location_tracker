@@ -1,9 +1,10 @@
 home:
-  appBarTitle: Create your profile
+  appBarTitle: Create your User
   chooseVehicle: Choose your Vehicle
+  yourNick: Your Nick
 vehicles:
   car: Car
-  moto: Motocycle
   truck: Truck
-  bike: Bicycle
+  police_car: Police Car
+  bus: Bus
   unknown: Unknown
