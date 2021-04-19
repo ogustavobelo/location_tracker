@@ -56,21 +56,19 @@ abstract class _AppControllerBase with Store {
   }
 
   @action
-  Future<void> setLocation() async {
+  Future<Location?> getLocation() async {
     try {
-      startLoading(message: "Retrieving your current location...");
       final usecase = await getCurrentLocation();
-      usecase.fold(
+      return usecase.fold(
         (error) => throw error,
         (result) {
           location = result;
+          return result;
         },
       );
     } catch (e) {
-      // logger.print("Error on setLocation $e", className: "AppController");
+      logger.print("Error on setLocation $e", className: "AppController");
       throw LocationException("Unable to set current location");
-    } finally {
-      stopLoading();
     }
   }
 

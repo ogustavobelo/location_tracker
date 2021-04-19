@@ -9,19 +9,18 @@ part of 'user_controller.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$UserController on _UserControllerBase, Store {
-  final _$selectedVehicleAtom =
-      Atom(name: '_UserControllerBase.selectedVehicle');
+  final _$userAtom = Atom(name: '_UserControllerBase.user');
 
   @override
-  Vehicle get selectedVehicle {
-    _$selectedVehicleAtom.reportRead();
-    return super.selectedVehicle;
+  User get user {
+    _$userAtom.reportRead();
+    return super.user;
   }
 
   @override
-  set selectedVehicle(Vehicle value) {
-    _$selectedVehicleAtom.reportWrite(value, super.selectedVehicle, () {
-      super.selectedVehicle = value;
+  set user(User value) {
+    _$userAtom.reportWrite(value, super.user, () {
+      super.user = value;
     });
   }
 
@@ -29,11 +28,11 @@ mixin _$UserController on _UserControllerBase, Store {
       ActionController(name: '_UserControllerBase');
 
   @override
-  void setSelectedVehicle(Vehicle vehicle) {
+  void setUser(User updatedUser) {
     final _$actionInfo = _$_UserControllerBaseActionController.startAction(
-        name: '_UserControllerBase.setSelectedVehicle');
+        name: '_UserControllerBase.setUser');
     try {
-      return super.setSelectedVehicle(vehicle);
+      return super.setUser(updatedUser);
     } finally {
       _$_UserControllerBaseActionController.endAction(_$actionInfo);
     }
@@ -42,7 +41,7 @@ mixin _$UserController on _UserControllerBase, Store {
   @override
   String toString() {
     return '''
-selectedVehicle: ${selectedVehicle}
+user: ${user}
     ''';
   }
 }

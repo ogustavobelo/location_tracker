@@ -5,7 +5,8 @@ import 'package:location_tracker/presentation/shared/components/hard_edge_contai
 
 class HardEdgeTextField extends StatelessWidget {
   final TextEditingController controller;
-  HardEdgeTextField({required this.controller});
+  final Function(String)? onSubmitted;
+  HardEdgeTextField({required this.controller, this.onSubmitted});
   @override
   Widget build(BuildContext context) {
     return HardEdgeContainer(
@@ -16,6 +17,7 @@ class HardEdgeTextField extends StatelessWidget {
         child: Center(
           child: TextField(
             controller: controller,
+            onSubmitted: onSubmitted,
             style: TextStyle(
               fontFamily: Fonts.pressStart,
               fontSize: 14,

@@ -10,3 +10,7 @@ abstract class Exception extends Equatable {
 class LocationException extends Exception {
   LocationException(String message) : super(message: message);
 }
+
+class UserException extends Exception {
+  UserException(String message) : super(message: message);
+}

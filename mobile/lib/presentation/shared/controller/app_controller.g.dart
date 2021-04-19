@@ -86,12 +86,12 @@ mixin _$AppController on _AppControllerBase, Store {
     });
   }
 
-  final _$setLocationAsyncAction =
-      AsyncAction('_AppControllerBase.setLocation');
+  final _$getLocationAsyncAction =
+      AsyncAction('_AppControllerBase.getLocation');
 
   @override
-  Future<void> setLocation() {
-    return _$setLocationAsyncAction.run(() => super.setLocation());
+  Future<Location?> getLocation() {
+    return _$getLocationAsyncAction.run(() => super.getLocation());
   }
 
   final _$requestPermissionAsyncAction =
