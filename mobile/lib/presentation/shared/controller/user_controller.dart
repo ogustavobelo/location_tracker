@@ -1,10 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:injectable/injectable.dart';
 import 'package:location_tracker/core/error/exceptions.dart';
 import 'package:location_tracker/domain/entities/location_entity.dart';
 import 'package:location_tracker/domain/entities/user_entity.dart';
 import 'package:location_tracker/domain/entities/vehicle_enum.dart';
+import 'package:location_tracker/domain/entities/websocket_payload_entity.dart';
 import 'package:location_tracker/domain/usecases/create_user_usecase.dart';
+import 'package:location_tracker/domain/usecases/on_message_usecase.dart';
 import 'package:mobx/mobx.dart';
 
 import 'package:location_tracker/core/logger/logger.dart';
@@ -18,10 +19,11 @@ class UserController = _UserControllerBase with _$UserController;
 abstract class _UserControllerBase with Store {
   final Logger logger;
   final CreateUser createUserUseCase;
-  _UserControllerBase({
-    required this.logger,
-    required this.createUserUseCase,
-  });
+  final OnMessageUseCase onMessageUseCase;
+  _UserControllerBase(
+      {required this.logger,
+      required this.createUserUseCase,
+      required this.onMessageUseCase});
 
   @observable
   User user = _anonymous;
@@ -29,6 +31,10 @@ abstract class _UserControllerBase with Store {
   @action
   void setUser(User updatedUser) {
     user = updatedUser;
+  }
+
+  Stream<WebSocketPayload> onMessage() {
+    return onMessageUseCase();
   }
 
   Future<void> createUser({
