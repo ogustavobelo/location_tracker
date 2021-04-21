@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:injectable/injectable.dart';
 import 'package:location_tracker/data/datasource/websocket_datasource.dart';
+import 'package:location_tracker/data/models/websocket_payload_model.dart';
 import 'package:location_tracker/domain/entities/user_entity.dart';
 import 'package:location_tracker/core/success/success.dart';
 import 'package:location_tracker/core/error/failures.dart';
@@ -31,8 +32,7 @@ class UserRepositoryImpl implements UserRepository {
   @override
   Stream<WebSocketPayload> onMessage() {
     return webSocketDS.channel.stream.map<WebSocketPayload>((event) {
-      print(event);
-      return WebSocketPayload.fromJson(event);
+      return WebSocketPayloadModel.fromJson(event);
     });
   }
 }

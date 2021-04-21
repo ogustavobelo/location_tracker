@@ -13,22 +13,22 @@ class WebSocketPayload extends Equatable {
   @override
   List<Object?> get props => [action];
 
-  Map<String, dynamic> toMap() {
-    return {
-      'action': action,
-      'connected_users': connectedUsers,
-    };
-  }
+  // Map<String, dynamic> toMap() {
+  //   return {
+  //     'action': action,
+  //     'connected_users': connectedUsers,
+  //   };
+  // }
 
-  factory WebSocketPayload.fromMap(Map<String, dynamic> map) {
-    return WebSocketPayload(
-      action: map['action'],
-      connectedUsers: List<String>.from(map['connected_users']),
-    );
-  }
+  // factory WebSocketPayload.fromMap(Map<String, dynamic> map) {
+  //   return WebSocketPayload(
+  //     action: map['action'],
+  //     connectedUsers: List<String>.from(map['connected_users']),
+  //   );
+  // }
 
-  String toJson() => json.encode(toMap());
+  // String toJson() => json.encode(toMap());
 
-  factory WebSocketPayload.fromJson(String source) =>
-      WebSocketPayload.fromMap(json.decode(source));
+  // factory WebSocketPayload.fromJson(String source) =>
+  //     WebSocketPayload.fromMap(json.decode(source));
 }
