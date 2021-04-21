@@ -5,7 +5,7 @@ import 'package:web_socket_channel/io.dart';
 
 abstract class WebSocketDS {
   IOWebSocketChannel get channel;
-  void _connect();
+  void connect();
 }
 
 @Injectable(as: WebSocketDS)
@@ -19,12 +19,12 @@ class WebSocketDSImpl implements WebSocketDS {
   @override
   IOWebSocketChannel get channel {
     if (_channel == null) {
-      _connect();
+      connect();
     }
     return _channel!;
   }
 
-  void _connect() {
+  void connect() {
     try {
       _channel ??= IOWebSocketChannel.connect(Uri.parse(flavors.websocketUrl));
     } catch (e) {

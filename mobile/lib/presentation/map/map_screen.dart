@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:location_tracker/core/data_injection/injectable.dart';
 import 'package:location_tracker/domain/entities/websocket_payload_entity.dart';
