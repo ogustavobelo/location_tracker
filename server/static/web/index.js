@@ -12,8 +12,8 @@ let socket = null;
     document.addEventListener("DOMContentLoaded", function () {
         socket = new ReconnectingWebSocket("ws://127.0.0.1:8080/ws", null, {debug: true, reconectInterval: 3000});
 
-        const offline = `<span class="badge bg-danger">Not connected</span>`
-        const online = `<span class="badge bg-success">Connected</span>`
+        // const offline = `<span class="badge bg-danger">Not connected</span>`
+        // const online = `<span class="badge bg-success">Connected</span>`
         // let statusDiv = document.getElementById("status");
 
         socket.onopen = () => {
@@ -63,35 +63,6 @@ let socket = null;
             jsonData["username"] = this.value;
             socket.send(JSON.stringify(jsonData));
         })
-
-        // messageField.addEventListener("keydown", function (event) {
-        //     if (event.code === "Enter") {
-        //         if (!socket) {
-        //             console.log("no connection");
-        //             return false
-        //         }
-
-        //         if ((userField.value === "") || (messageField.value === "")) {
-        //             errorMessage("Fill out username and message!");
-        //             return false;
-        //         } else {
-        //             sendMessage()
-        //         }
-
-        //         event.preventDefault();
-        //         event.stopPropagation();
-        //     }
-        // })
-
-
-        // document.getElementById("sendBtn").addEventListener("click", function () {
-        //     if ((userField.value === "") || (messageField.value === "")) {
-        //         errorMessage("Fill out username and message!");
-        //         return false;
-        //     } else {
-        //         sendMessage()
-        //     }
-        // })
     })
 
     function sendMessage() {

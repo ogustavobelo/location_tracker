@@ -1,4 +1,4 @@
-module location_tracker_server
+module github.com/ogustavobelo/location_tracker
 
 go 1.14
 
