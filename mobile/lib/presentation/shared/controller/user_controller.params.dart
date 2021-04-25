@@ -2,7 +2,7 @@ part of 'user_controller.dart';
 
 class UserCreateParams {
   final String name;
-  final Vehicle vehicle;
+  final String vehicle;
   final Location location;
   UserCreateParams({
     required this.name,

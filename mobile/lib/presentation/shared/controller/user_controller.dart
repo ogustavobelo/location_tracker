@@ -1,10 +1,13 @@
+import 'dart:async';
+
 import 'package:injectable/injectable.dart';
+import 'package:location_tracker/core/constants/vehicle_const.dart';
 import 'package:location_tracker/core/error/exceptions.dart';
 import 'package:location_tracker/domain/entities/location_entity.dart';
 import 'package:location_tracker/domain/entities/user_entity.dart';
-import 'package:location_tracker/domain/entities/vehicle_enum.dart';
 import 'package:location_tracker/domain/entities/websocket_payload_entity.dart';
 import 'package:location_tracker/domain/usecases/create_user_usecase.dart';
+import 'package:location_tracker/domain/usecases/list_users_usecase.dart';
 import 'package:location_tracker/domain/usecases/on_message_usecase.dart';
 import 'package:mobx/mobx.dart';
 
@@ -19,11 +22,14 @@ class UserController = _UserControllerBase with _$UserController;
 abstract class _UserControllerBase with Store {
   final Logger logger;
   final CreateUser createUserUseCase;
-  final OnMessageUseCase onMessageUseCase;
-  _UserControllerBase(
-      {required this.logger,
-      required this.createUserUseCase,
-      required this.onMessageUseCase});
+  final ListUsers listUsersUseCase;
+  final OnMessageControllerUseCase onMessageControllerUseCase;
+  _UserControllerBase({
+    required this.logger,
+    required this.createUserUseCase,
+    required this.onMessageControllerUseCase,
+    required this.listUsersUseCase,
+  });
 
   @observable
   User user = _anonymous;
@@ -33,8 +39,21 @@ abstract class _UserControllerBase with Store {
     user = updatedUser;
   }
 
-  Stream<WebSocketPayload> onMessage() {
-    return onMessageUseCase();
+  StreamController<WebSocketPayload> onMessage() {
+    return onMessageControllerUseCase();
+  }
+
+  Future<void> listUsers(Function(String) translate) async {
+    final usecase = await listUsersUseCase();
+    usecase.fold(
+      (error) {
+        logger.print('Error on createUser $error');
+        throw UserException(translate('errors.unableList'));
+      },
+      (_) {
+        print('User List updated!');
+      },
+    );
   }
 
   Future<void> createUser({
@@ -42,9 +61,8 @@ abstract class _UserControllerBase with Store {
     required Function(String) translate,
   }) async {
     final User _newUser = User(
-      uid: '123456',
       visible: true,
-      name: params.name,
+      nick: params.name,
       vehicle: params.vehicle,
       location: params.location,
     );
@@ -63,8 +81,8 @@ abstract class _UserControllerBase with Store {
 
   static User get _anonymous {
     return User(
-      name: 'Anonymous',
-      vehicle: Vehicle.unknown,
+      nick: 'Anonymous',
+      vehicle: VehiclesConst.unknown,
       visible: true,
     );
   }

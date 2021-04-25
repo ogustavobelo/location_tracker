@@ -7,7 +7,8 @@ import 'package:location_tracker/domain/entities/location_entity.dart';
 import 'package:location_tracker/domain/repositories/location_repository.dart';
 
 @injectable
-class GetCurrentLocation extends UseCase<Either<Failure, Location>, void> {
+class GetCurrentLocation
+    extends UseCaseFuture<Either<Failure, Location>, void> {
   final LocationRepository locationRepository;
   GetCurrentLocation({
     required this.locationRepository,

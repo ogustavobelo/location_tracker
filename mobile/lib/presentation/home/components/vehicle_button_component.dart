@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:location_tracker/core/helpers/i18n_helper.dart';
 import 'package:location_tracker/core/helpers/strings_helpers.dart';
 
-import 'package:location_tracker/domain/entities/vehicle_enum.dart';
-
 class VehicleButton extends StatelessWidget {
-  final Vehicle vehicle;
-  final Function(Vehicle) onSelect;
+  final String vehicle;
+  final Function(String) onSelect;
   final bool? selected;
   const VehicleButton({
     Key? key,

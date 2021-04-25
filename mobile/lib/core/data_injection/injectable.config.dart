@@ -14,11 +14,12 @@ import '../../domain/repositories/location_repository.dart' as _i4;
 import '../../domain/repositories/user_repository.dart' as _i11;
 import '../../domain/usecases/create_user_usecase.dart' as _i13;
 import '../../domain/usecases/get_current_location_usecase.dart' as _i10;
-import '../../domain/usecases/on_message_usecase.dart' as _i14;
+import '../../domain/usecases/list_users_usecase.dart' as _i14;
+import '../../domain/usecases/on_message_usecase.dart' as _i15;
 import '../../domain/usecases/request_location_service_usecase.dart' as _i7;
 import '../../domain/usecases/request_permission_usecase.dart' as _i8;
-import '../../presentation/shared/controller/app_controller.dart' as _i15;
-import '../../presentation/shared/controller/user_controller.dart' as _i16;
+import '../../presentation/shared/controller/app_controller.dart' as _i16;
+import '../../presentation/shared/controller/user_controller.dart' as _i17;
 import '../flavors/flavors.dart' as _i3;
 import '../logger/logger.dart' as _i6; // ignore_for_file: unnecessary_lambdas
 
@@ -42,16 +43,20 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       () => _i12.UserRepositoryImpl(get<_i9.WebSocketDS>()));
   gh.factory<_i13.CreateUser>(
       () => _i13.CreateUser(userRepository: get<_i11.UserRepository>()));
-  gh.factory<_i14.OnMessageUseCase>(
-      () => _i14.OnMessageUseCase(userRepository: get<_i11.UserRepository>()));
-  gh.singleton<_i15.AppController>(_i15.AppController(
+  gh.factory<_i14.ListUsers>(
+      () => _i14.ListUsers(userRepository: get<_i11.UserRepository>()));
+  gh.factory<_i15.OnMessageControllerUseCase>(() =>
+      _i15.OnMessageControllerUseCase(
+          userRepository: get<_i11.UserRepository>()));
+  gh.singleton<_i16.AppController>(_i16.AppController(
       logger: get<_i6.Logger>(),
       getCurrentLocation: get<_i10.GetCurrentLocation>(),
       requestLocationServiceUseCase: get<_i7.RequestLocationService>(),
       requestPermissionUseCase: get<_i8.RequestPermission>()));
-  gh.singleton<_i16.UserController>(_i16.UserController(
+  gh.singleton<_i17.UserController>(_i17.UserController(
       logger: get<_i6.Logger>(),
       createUserUseCase: get<_i13.CreateUser>(),
-      onMessageUseCase: get<_i14.OnMessageUseCase>()));
+      onMessageControllerUseCase: get<_i15.OnMessageControllerUseCase>(),
+      listUsersUseCase: get<_i14.ListUsers>()));
   return get;
 }

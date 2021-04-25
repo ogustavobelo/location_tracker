@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:location_tracker/domain/entities/vehicle_enum.dart';
+import 'package:location_tracker/core/constants/vehicle_const.dart';
 import 'package:location_tracker/presentation/home/components/vehicle_button_component.dart';
 
 class VehiclePicker extends StatelessWidget {
-  final Vehicle selected;
-  final Function(Vehicle) onSelect;
+  final String selected;
+  final Function(String) onSelect;
   const VehiclePicker({
     Key? key,
     required this.selected,
     required this.onSelect,
   }) : super(key: key);
   // final _userController = getIt<UserController>();
-  static const List<Vehicle> _vehicles = [
-    Vehicle.car,
-    Vehicle.police_car,
-    Vehicle.bus,
-    Vehicle.truck
+  static const List<String> _vehicles = [
+    VehiclesConst.car,
+    VehiclesConst.policeCar,
+    VehiclesConst.bus,
+    VehiclesConst.truck
   ];
   @override
   Widget build(BuildContext context) {

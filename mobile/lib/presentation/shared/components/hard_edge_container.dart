@@ -4,15 +4,19 @@ import 'package:location_tracker/core/themes/colors.dart';
 class HardEdgeContainer extends StatelessWidget {
   final double borderSize;
   final Color borderColor;
+  final Color backgroundColor;
   final double width;
   final double height;
   final Widget child;
+  final EdgeInsetsGeometry? padding;
   HardEdgeContainer({
     required this.child,
     this.borderSize = 4.0,
     this.borderColor = AppColors.darkGrey,
+    this.backgroundColor = AppColors.lightBlueGrey,
     this.width: 100,
     this.height: 60,
+    this.padding,
   });
   @override
   Widget build(BuildContext context) {

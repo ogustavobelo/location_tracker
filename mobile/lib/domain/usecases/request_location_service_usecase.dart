@@ -6,7 +6,8 @@ import 'package:location_tracker/core/usecase/usecase.dart';
 import 'package:location_tracker/domain/repositories/location_repository.dart';
 
 @injectable
-class RequestLocationService extends UseCase<Either<Failure, Success>, void> {
+class RequestLocationService
+    extends UseCaseFuture<Either<Failure, Success>, void> {
   final LocationRepository locationRepository;
   RequestLocationService({
     required this.locationRepository,

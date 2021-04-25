@@ -8,8 +8,10 @@ part of 'websocket_payload_model.dart';
 
 WebSocketPayloadModel _$WebSocketPayloadModelFromJson(Map json) {
   return WebSocketPayloadModel(
-    json['action'] as String,
-    (json['connectedUsers'] as List<dynamic>).map((e) => e as String).toList(),
+    action: json['action'] as String,
+    connectedUsers: (json['connected_users'] as List<dynamic>)
+        .map((e) => UserModel.fromJson(e as Map))
+        .toList(),
   );
 }
 
@@ -17,5 +19,6 @@ Map<String, dynamic> _$WebSocketPayloadModelToJson(
         WebSocketPayloadModel instance) =>
     <String, dynamic>{
       'action': instance.action,
-      'connectedUsers': instance.connectedUsers,
+      'connected_users':
+          instance.connectedUsers.map((e) => e.toJson()).toList(),
     };

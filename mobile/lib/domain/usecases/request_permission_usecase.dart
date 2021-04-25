@@ -6,7 +6,7 @@ import 'package:location_tracker/core/usecase/usecase.dart';
 import 'package:location_tracker/domain/repositories/location_repository.dart';
 
 @injectable
-class RequestPermission extends UseCase<Either<Failure, Success>, void> {
+class RequestPermission extends UseCaseFuture<Either<Failure, Success>, void> {
   final LocationRepository locationRepository;
   RequestPermission({
     required this.locationRepository,

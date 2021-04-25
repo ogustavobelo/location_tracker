@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:location_tracker/core/constants/fonts.dart';
+import 'package:location_tracker/core/constants/vehicle_const.dart';
 import 'package:location_tracker/core/data_injection/injectable.dart';
 import 'package:location_tracker/core/error/exceptions.dart';
 import 'package:location_tracker/core/helpers/i18n_helper.dart';
 import 'package:location_tracker/core/notifications/notification_service.dart';
 import 'package:location_tracker/domain/entities/location_entity.dart';
-import 'package:location_tracker/domain/entities/vehicle_enum.dart';
 import 'package:location_tracker/presentation/home/components/vehicle_picker_component.dart';
 import 'package:location_tracker/presentation/map/map_screen.dart';
 import 'package:location_tracker/presentation/shared/components/hard_edge_button.dart';
@@ -24,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final _appController = getIt<AppController>();
   final _userController = getIt<UserController>();
   final TextEditingController _nickController = TextEditingController();
-  Vehicle _selectedVehicle = Vehicle.car;
+  String _selectedVehicle = VehiclesConst.car;
 
   @override
   void initState() {
@@ -66,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void setChoosedVehicle(Vehicle choosed) {
+  void setChoosedVehicle(String choosed) {
     setState(() => _selectedVehicle = choosed);
   }
 
@@ -107,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _goToMap() {
-    Navigator.pushReplacement(
+    Navigator.push(
         context, MaterialPageRoute(builder: (context) => MapScreen()));
   }
 
@@ -122,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
             elevation: 0.0,
           ),
           body: _appController.loading
-              ? LocationLoading()
+              ? Center(child: LocationLoading())
               : ListView(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   shrinkWrap: true,

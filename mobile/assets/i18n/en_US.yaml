@@ -11,6 +11,7 @@ home:
     unexpected: Unexpected error
     emptyNick: Nick can\'t be empty
     unableCreate: Unable to Create an User
+    unableList: Unable to List Connected Users
 vehicles:
   car: Car
   truck: Truck

@@ -1,10 +1,13 @@
 import 'package:injectable/injectable.dart';
 import 'package:location_tracker/core/error/failures.dart';
 import 'package:location_tracker/core/flavors/flavors.dart';
-import 'package:web_socket_channel/io.dart';
+
+import 'package:web_socket_channel/io.dart'
+    if (dart.library.js) "package:web_socket_channel/web_socket_channel.dart";
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 abstract class WebSocketDS {
-  IOWebSocketChannel get channel;
+  WebSocketChannel get channel;
   void connect();
 }
 
@@ -14,10 +17,10 @@ class WebSocketDSImpl implements WebSocketDS {
   WebSocketDSImpl({
     required this.flavors,
   });
-  IOWebSocketChannel? _channel;
+  WebSocketChannel? _channel;
 
   @override
-  IOWebSocketChannel get channel {
+  WebSocketChannel get channel {
     if (_channel == null) {
       connect();
     }
@@ -26,7 +29,7 @@ class WebSocketDSImpl implements WebSocketDS {
 
   void connect() {
     try {
-      _channel ??= IOWebSocketChannel.connect(Uri.parse(flavors.websocketUrl));
+      _channel ??= WebSocketChannel.connect(Uri.parse(flavors.websocketUrl));
     } catch (e) {
       print(e);
       throw WebSocketFailure();

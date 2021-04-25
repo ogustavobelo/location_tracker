@@ -2,7 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:injectable/injectable.dart';
+import 'package:location_tracker/core/constants/websockets_events.dart';
 import 'package:location_tracker/data/datasource/websocket_datasource.dart';
+import 'package:location_tracker/data/models/location_model.dart';
+import 'package:location_tracker/data/models/user_model.dart';
 import 'package:location_tracker/data/models/websocket_payload_model.dart';
 import 'package:location_tracker/domain/entities/user_entity.dart';
 import 'package:location_tracker/core/success/success.dart';
@@ -19,8 +22,16 @@ class UserRepositoryImpl implements UserRepository {
   Future<Either<Failure, Success>> createUser(User user) async {
     try {
       final data = {
-        'action': 'create_user',
-        'username': user.name,
+        'action': WSEvents.createUser,
+        'user': UserModel(
+          nick: user.nick,
+          visible: user.visible,
+          vehicle: user.vehicle,
+          location: LocationModel(
+            latitude: user.location!.latitude,
+            longitude: user.location!.longitude,
+          ),
+        ).toJson(),
       };
       webSocketDS.channel.sink.add(json.encode(data));
       return right(VoidSuccess());
@@ -30,9 +41,26 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Stream<WebSocketPayload> onMessage() {
-    return webSocketDS.channel.stream.map<WebSocketPayload>((event) {
-      return WebSocketPayloadModel.fromJson(event);
+  Future<Either<Failure, Success>> listUsers() async {
+    try {
+      final data = {'action': WSEvents.getUsers};
+      webSocketDS.channel.sink.add(json.encode(data));
+      return right(VoidSuccess());
+    } catch (e) {
+      return left(UserFailure());
+    }
+  }
+
+  @override
+  StreamController<WebSocketPayload> onMessageController() {
+    final StreamController<WebSocketPayload> controller =
+        StreamController<WebSocketPayload>.broadcast();
+    final Stream<WebSocketPayload> stream =
+        webSocketDS.channel.stream.map<WebSocketPayload>((event) {
+      print(event);
+      return WebSocketPayloadModel.fromJson(json.decode(event));
     });
+    controller.addStream(stream);
+    return controller;
   }
 }

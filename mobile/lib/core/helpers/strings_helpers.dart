@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class StringHelper {
   static String enumToString(Object raw) {
     try {
@@ -5,5 +7,9 @@ class StringHelper {
     } catch (e) {
       return "error";
     }
+  }
+
+  static String dateToString(DateTime date, {String format = 'dd/MM/yyyy'}) {
+    return DateFormat(format).format(date);
   }
 }
