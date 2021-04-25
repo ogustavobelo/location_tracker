@@ -10,7 +10,8 @@ let socket = null;
     }
 
     document.addEventListener("DOMContentLoaded", function () {
-        socket = new ReconnectingWebSocket("ws://127.0.0.1:8080/ws", null, {debug: true, reconectInterval: 3000});
+        socket = new ReconnectingWebSocket("wss://go-location-tracker.herokuapp.com/ws", null, {debug: true, reconectInterval: 3000});
+        // socket = new ReconnectingWebSocket("wss://go-location-tracker.herokuapp.com/ws", null, {debug: true, reconectInterval: 3000});
 
         // const offline = `<span class="badge bg-danger">Not connected</span>`
         // const online = `<span class="badge bg-success">Connected</span>`
@@ -36,6 +37,10 @@ let socket = null;
             console.log("Action is", data.action);
 
             switch (data.action) {
+                case 'user_created':
+                    console.log('user created '+data.connected_users[0]['uid'])
+                    
+                    break;
                 case "list_users":
                     let ul = document.getElementById("online_users");
                     while (ul.firstChild) ul.removeChild(ul.firstChild);
@@ -43,14 +48,10 @@ let socket = null;
                     if (data.connected_users.length > 0) {
                         data.connected_users.forEach(function (item) {
                             let li = document.createElement("li");
-                            li.appendChild(document.createTextNode(item));
+                            li.appendChild(document.createTextNode(item['nick'] + ' - ' + item['uid']));
                             ul.appendChild(li);
                         })
                     }
-                    break;
-
-                case "broadcast":
-                    o.innerHTML = o.innerHTML + data.message + "<br>";
                     break;
             }
 
@@ -58,25 +59,11 @@ let socket = null;
 
 
         userField.addEventListener("change", function () {
+            console.log('create_user called')
             let jsonData = {};
             jsonData["action"] = "create_user";
-            jsonData["username"] = this.value;
+            jsonData["user"] ={'nick': this.value};
+            console.log('console data' + jsonData)
             socket.send(JSON.stringify(jsonData));
         })
     })
-
-    function sendMessage() {
-        let jsonData = {};
-        jsonData["action"] = "broadcast";
-        jsonData["username"] = userField.value;
-        jsonData["message"] = messageField.value;
-        socket.send(JSON.stringify(jsonData))
-        messageField.value = "";
-    }
-
-    function errorMessage(msg) {
-        notie.alert({
-            type: 'error',
-            text: msg,
-        })
-    }

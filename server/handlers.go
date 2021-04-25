@@ -4,33 +4,23 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
+	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 )
 
-var wsChan = make(chan WebSocketPayload)
-var clients = make(map[WebSocketConnection]string)
+// const (
+// 	dateTimeFormat = "02/Jan/2006 15:04:05"
+// )
 
-type WebSocketConnection struct {
-	*websocket.Conn
-}
+var wsChan = make(chan WebSocketPayload)
+var clients = make(map[WebSocketConnection]UserModel)
 
 var upgradeConnection = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
 	CheckOrigin:     func(r *http.Request) bool { return true },
-}
-
-type WebSocketPayload struct {
-	Action   string              `json:"action"`
-	Username string              `json:"username"`
-	Uid      string              `json:"uid"`
-	Conn     WebSocketConnection `json:"-"`
-}
-
-type WebSocketResponse struct {
-	Action        string   `json:"action"`
-	ConnectedUser []string `json:"connected_users"`
 }
 
 func WebSocketEndpoint(w http.ResponseWriter, r *http.Request) {
@@ -41,10 +31,10 @@ func WebSocketEndpoint(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("Client connected to endpoint")
 
-	webSocketResponse := WebSocketResponse{ConnectedUser: make([]string, 0)}
+	webSocketResponse := WebSocketResponse{ConnectedUser: make([]UserModel, 0)}
 
 	conn := WebSocketConnection{Conn: ws}
-	clients[conn] = ""
+	clients[conn] = UserModel{}
 
 	err = ws.WriteJSON(webSocketResponse)
 	if err != nil {
@@ -80,24 +70,50 @@ func ListenToWebSocketChannel() {
 		switch event.Action {
 		case "create_user":
 			fmt.Println("create user called!")
-			clients[event.Conn] = event.Username
+			fmt.Println(event.User.Nick)
+
+			userCreated := createNewUser(event.User)
+			clients[event.Conn] = userCreated
+			event.Conn.WriteJSON(WebSocketResponse{Action: "user_created", ConnectedUser: []UserModel{userCreated}})
+
 			users := getUsersList()
 			response.Action = "list_users"
 			response.ConnectedUser = users
+			broadcastToAll(response)
+		case "get_users":
+			response.Action = "list_users"
+			response.ConnectedUser = getUsersList()
 			broadcastToAll(response)
 		}
 
 	}
 }
 
-func getUsersList() []string {
-	var userList []string
+func createNewUser(eventUser UserModel) UserModel {
+	fmt.Println(eventUser.Nick)
+	eventUser.Uid = generateUuid()
+	eventUser.CreatedAt = time.Now().Format(time.RFC3339)
+	return eventUser
+}
+
+func getUsersList() []UserModel {
+	var userList []UserModel
 	for _, client := range clients {
-		if client != "" {
+		if client.Uid != "" {
 			userList = append(userList, client)
 		}
 	}
 	return userList
+}
+
+func generateUuid() string {
+	id := uuid.New().String()
+	for _, user := range clients {
+		if user.Uid == id {
+			return generateUuid()
+		}
+	}
+	return id
 }
 
 func broadcastToAll(response WebSocketResponse) {

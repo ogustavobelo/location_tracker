@@ -12,7 +12,7 @@ func routes() http.Handler {
 	mux.Get("/ws", http.HandlerFunc(WebSocketEndpoint))
 
 	fileServer := http.FileServer(http.Dir("./static/web/"))
-	mux.Get("/static/web/", http.StripPrefix("/static/web", fileServer))
+	mux.Get("/web/", http.StripPrefix("/web/", fileServer))
 
 	return mux
 }
