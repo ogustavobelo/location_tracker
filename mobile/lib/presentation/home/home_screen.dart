@@ -107,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _goToMap() {
-    Navigator.push(
+    Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => MapScreen()));
   }
 

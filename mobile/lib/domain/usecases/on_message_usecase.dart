@@ -6,10 +6,10 @@ import 'package:location_tracker/domain/entities/websocket_payload_entity.dart';
 import 'package:location_tracker/domain/repositories/user_repository.dart';
 
 @injectable
-class OnMessageControllerUseCase
+class OnMessageUseCase
     implements UseCase<StreamController<WebSocketPayload>, void> {
   final UserRepository userRepository;
-  OnMessageControllerUseCase({
+  OnMessageUseCase({
     required this.userRepository,
   });
   @override

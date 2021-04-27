@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dartz/dartz.dart';
 import 'package:location_tracker/core/error/failures.dart';
 import 'package:location_tracker/core/success/success.dart';
@@ -7,4 +9,5 @@ abstract class LocationRepository {
   Future<Either<Failure, Location>> getCurrentLocation();
   Future<Either<Failure, Success>> requestPermission();
   Future<Either<Failure, Success>> requestLocationService();
+  StreamController<Location> onLocationChanged();
 }

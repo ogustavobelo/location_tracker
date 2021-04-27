@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 import 'package:location/location.dart';
@@ -63,5 +65,18 @@ class LocationRepositoryImpl implements LocationRepository {
     } catch (e) {
       return left(LocationFailure());
     }
+  }
+
+  @override
+  StreamController<entity.Location> onLocationChanged() {
+    final StreamController<entity.Location> controller =
+        StreamController<entity.Location>.broadcast();
+    final Stream<entity.Location> stream =
+        Location().onLocationChanged.map((locationData) {
+      return entity.Location(
+          latitude: locationData.latitude!, longitude: locationData.longitude!);
+    });
+    controller.addStream(stream);
+    return controller;
   }
 }

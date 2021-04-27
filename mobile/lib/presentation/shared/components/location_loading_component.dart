@@ -10,6 +10,7 @@ class LocationLoading extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CircularProgressIndicator(),
           if (message != null) ...[

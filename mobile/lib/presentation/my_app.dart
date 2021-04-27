@@ -7,7 +7,7 @@ import 'package:flutter_i18n/loaders/file_translation_loader.dart';
 import 'package:location_tracker/core/constants/languages_const.dart';
 import 'package:location_tracker/core/helpers/i18n_helper.dart';
 import 'package:location_tracker/core/themes/themes.dart';
-import 'package:location_tracker/presentation/home/home_screen.dart';
+import 'package:location_tracker/presentation/splash/splash_screen.dart';
 import 'package:overlay_support/overlay_support.dart';
 
 class MyApp extends StatelessWidget {
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Location tracker',
         theme: Themes.defaultTheme,
-        home: HomeScreen(),
+        home: SplashScreen(),
         localizationsDelegates: [
           FlutterI18nDelegate(
             translationLoader: FileTranslationLoader(
