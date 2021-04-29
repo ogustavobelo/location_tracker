@@ -11,8 +11,14 @@ part 'websocket_payload_model.g.dart';
 class WebSocketPayloadModel extends WebSocketPayload {
   @JsonKey(name: 'connected_users')
   final List<UserModel> connectedUsers;
-  WebSocketPayloadModel({required String action, required this.connectedUsers})
-      : super(action: action, connectedUsers: connectedUsers);
+  @JsonKey(name: 'connection_user_id')
+  WebSocketPayloadModel({
+    required String action,
+    required this.connectedUsers,
+  }) : super(
+          action: action,
+          connectedUsers: connectedUsers,
+        );
 
   factory WebSocketPayloadModel.fromJson(Map json) =>
       _$WebSocketPayloadModelFromJson(json);

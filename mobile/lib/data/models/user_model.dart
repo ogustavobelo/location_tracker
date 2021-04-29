@@ -1,5 +1,6 @@
-import 'package:location_tracker/domain/entities/user_entity.dart';
 import 'package:json_annotation/json_annotation.dart';
+
+import 'package:location_tracker/domain/entities/user_entity.dart';
 
 import 'location_model.dart';
 
@@ -26,6 +27,5 @@ class UserModel extends User {
         );
 
   factory UserModel.fromJson(Map json) => _$UserModelFromJson(json);
-
   Map<String, dynamic> toJson() => _$UserModelToJson(this);
 }

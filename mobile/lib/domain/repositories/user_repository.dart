@@ -9,6 +9,7 @@ import 'package:location_tracker/domain/entities/websocket_payload_entity.dart';
 
 abstract class UserRepository {
   Future<Either<Failure, Success>> createUser(User user);
+  Future<Either<Failure, Success>> updateUser(User user);
   Future<Either<Failure, Success>> listUsers();
   StreamController<WebSocketPayload> onMessageController();
 }

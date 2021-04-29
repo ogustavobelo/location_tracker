@@ -4,9 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"time"
 
-	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 )
 
@@ -63,57 +61,47 @@ func ListenForWs(conn *WebSocketConnection) {
 }
 
 func ListenToWebSocketChannel() {
-	var response WebSocketResponse
-
 	for {
 		event := <-wsChan
 		switch event.Action {
 		case "create_user":
 			fmt.Println("create user called!")
-			fmt.Println(event.User.Nick)
-
-			userCreated := createNewUser(event.User)
-			clients[event.Conn] = userCreated
-			event.Conn.WriteJSON(WebSocketResponse{Action: "user_created", ConnectedUser: []UserModel{userCreated}})
-
-			users := getUsersList()
-			response.Action = "list_users"
-			response.ConnectedUser = users
-			broadcastToAll(response)
+			clients[event.Conn] = event.User
+			updateUsersAndBroadcast()
+		case "update_user":
+			fmt.Println("user getted on update", event.User)
+			updateUser(event.User)
+			updateUsersAndBroadcast()
 		case "get_users":
-			response.Action = "list_users"
-			response.ConnectedUser = getUsersList()
-			broadcastToAll(response)
+			updateUsersAndBroadcast()
 		}
 
 	}
 }
 
-func createNewUser(eventUser UserModel) UserModel {
-	fmt.Println(eventUser.Nick)
-	eventUser.Uid = generateUuid()
-	eventUser.CreatedAt = time.Now().Format(time.RFC3339)
-	return eventUser
+func updateUser(user UserModel) {
+	for con, client := range clients {
+		if client.Uid == user.Uid {
+			clients[con] = user
+		}
+	}
+}
+
+func updateUsersAndBroadcast() {
+	var response WebSocketResponse
+	response.Action = "list_users"
+	response.ConnectedUser = getUsersList()
+	broadcastToAll(response)
 }
 
 func getUsersList() []UserModel {
 	var userList []UserModel
 	for _, client := range clients {
-		if client.Uid != "" {
+		if client.Uid != "" && client.Visible {
 			userList = append(userList, client)
 		}
 	}
 	return userList
-}
-
-func generateUuid() string {
-	id := uuid.New().String()
-	for _, user := range clients {
-		if user.Uid == id {
-			return generateUuid()
-		}
-	}
-	return id
 }
 
 func broadcastToAll(response WebSocketResponse) {

@@ -5,6 +5,7 @@ import 'package:location_tracker/core/data_injection/injectable.dart';
 import 'package:location_tracker/core/helpers/i18n_helper.dart';
 import 'package:location_tracker/domain/entities/location_entity.dart';
 import 'package:location_tracker/domain/entities/websocket_payload_entity.dart';
+import 'package:location_tracker/presentation/shared/components/location_loading_component.dart';
 import 'package:location_tracker/presentation/shared/components/user_tile_component.dart';
 import 'package:location_tracker/presentation/shared/controller/user_controller.dart';
 import 'package:rxdart/rxdart.dart';
@@ -16,8 +17,8 @@ class MapScreen extends StatefulWidget {
 
 class _MapScreenState extends State<MapScreen> {
   final _userController = getIt<UserController>();
-  late StreamController<WebSocketPayload> _onMessageController;
-  late StreamController<Location> _onLocationController;
+  late final StreamController<WebSocketPayload> _onMessageController;
+  late final StreamController<Location> _onLocationController;
 
   @override
   void initState() {
@@ -64,11 +65,14 @@ class _MapScreenState extends State<MapScreen> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     print(
-                        '${snapshot.data!.latitude} - ${snapshot.data!.longitude}');
+                        '${snapshot.data!.longitude} ${snapshot.data!.latitude}');
+                    _userController.updateLocation(snapshot.data!);
                   }
                   return StreamBuilder<WebSocketPayload>(
                     stream: _onMessageController.stream,
                     builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting)
+                        return LocationLoading();
                       if (!snapshot.hasData || snapshot.hasError) {
                         print(snapshot.error);
                         return Text('Has no Available Data');

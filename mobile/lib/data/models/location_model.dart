@@ -12,6 +12,5 @@ class LocationModel extends Location {
       : super(latitude: latitude, longitude: longitude);
 
   factory LocationModel.fromJson(Map json) => _$LocationModelFromJson(json);
-
   Map<String, dynamic> toJson() => _$LocationModelToJson(this);
 }

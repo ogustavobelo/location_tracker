@@ -19,8 +19,9 @@ import '../../domain/usecases/on_location_changed_usecase.dart' as _i7;
 import '../../domain/usecases/on_message_usecase.dart' as _i16;
 import '../../domain/usecases/request_location_service_usecase.dart' as _i8;
 import '../../domain/usecases/request_permission_usecase.dart' as _i9;
-import '../../presentation/shared/controller/app_controller.dart' as _i17;
-import '../../presentation/shared/controller/user_controller.dart' as _i18;
+import '../../domain/usecases/update_user_usecase.dart' as _i17;
+import '../../presentation/shared/controller/app_controller.dart' as _i18;
+import '../../presentation/shared/controller/user_controller.dart' as _i19;
 import '../flavors/flavors.dart' as _i3;
 import '../logger/logger.dart' as _i6; // ignore_for_file: unnecessary_lambdas
 
@@ -50,14 +51,17 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
       () => _i15.ListUsers(userRepository: get<_i12.UserRepository>()));
   gh.factory<_i16.OnMessageUseCase>(
       () => _i16.OnMessageUseCase(userRepository: get<_i12.UserRepository>()));
-  gh.singleton<_i17.AppController>(_i17.AppController(
+  gh.factory<_i17.UpdateUser>(
+      () => _i17.UpdateUser(userRepository: get<_i12.UserRepository>()));
+  gh.singleton<_i18.AppController>(_i18.AppController(
       logger: get<_i6.Logger>(),
       getCurrentLocation: get<_i11.GetCurrentLocation>(),
       requestLocationServiceUseCase: get<_i8.RequestLocationService>(),
       requestPermissionUseCase: get<_i9.RequestPermission>()));
-  gh.singleton<_i18.UserController>(_i18.UserController(
+  gh.singleton<_i19.UserController>(_i19.UserController(
       logger: get<_i6.Logger>(),
       createUserUseCase: get<_i14.CreateUser>(),
+      updateUserUseCase: get<_i17.UpdateUser>(),
       onMessageControllerUseCase: get<_i16.OnMessageUseCase>(),
       listUsersUseCase: get<_i15.ListUsers>(),
       onLocationChangedUseCase: get<_i7.OnLocationChangedUseCase>()));
