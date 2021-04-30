@@ -32,10 +32,10 @@ abstract class _AppControllerBase with Store {
   Location? location;
 
   @observable
-  bool hasPermission = false;
+  bool hasPermission = true;
 
   @observable
-  bool locationServiceEnabled = false;
+  bool locationServiceEnabled = true;
 
   @observable
   bool loading = false;

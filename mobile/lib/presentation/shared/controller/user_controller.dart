@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter/widgets.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:location_tracker/core/constants/vehicle_const.dart';
 import 'package:location_tracker/core/error/exceptions.dart';
@@ -41,9 +43,20 @@ abstract class _UserControllerBase with Store {
   @observable
   User user = _anonymous;
 
+  @observable
+  User? selectedUser;
+
+  @observable
+  Map<String, BitmapDescriptor> bitmaps = {};
+
   @action
   void setUser(User updatedUser) {
     user = updatedUser;
+  }
+
+  @action
+  void setSelectedUser(User? user) {
+    selectedUser = user;
   }
 
   StreamController<WebSocketPayload> onMessage() {
@@ -100,6 +113,24 @@ abstract class _UserControllerBase with Store {
       usecase.fold((l) => throw l, (r) => logger.print('location updated!'));
     } catch (e) {
       logger.print('Unable to update location $e');
+    }
+  }
+
+  @action
+  Future<void> getBitmapImage() async {
+    final List<String> _vehicles = [
+      VehiclesConst.car,
+      VehiclesConst.policeCar,
+      VehiclesConst.bus,
+      VehiclesConst.truck
+    ];
+    final vehiclesBitmaps = await Future.wait(_vehicles
+        .map((vehicle) => BitmapDescriptor.fromAssetImage(
+            ImageConfiguration.empty, 'assets/images/min/$vehicle.png'))
+        .toList());
+
+    for (var i = 0; i < vehiclesBitmaps.length; i++) {
+      bitmaps[_vehicles[i]] = vehiclesBitmaps[i];
     }
   }
 

@@ -24,6 +24,44 @@ mixin _$UserController on _UserControllerBase, Store {
     });
   }
 
+  final _$selectedUserAtom = Atom(name: '_UserControllerBase.selectedUser');
+
+  @override
+  User? get selectedUser {
+    _$selectedUserAtom.reportRead();
+    return super.selectedUser;
+  }
+
+  @override
+  set selectedUser(User? value) {
+    _$selectedUserAtom.reportWrite(value, super.selectedUser, () {
+      super.selectedUser = value;
+    });
+  }
+
+  final _$bitmapsAtom = Atom(name: '_UserControllerBase.bitmaps');
+
+  @override
+  Map<String, BitmapDescriptor> get bitmaps {
+    _$bitmapsAtom.reportRead();
+    return super.bitmaps;
+  }
+
+  @override
+  set bitmaps(Map<String, BitmapDescriptor> value) {
+    _$bitmapsAtom.reportWrite(value, super.bitmaps, () {
+      super.bitmaps = value;
+    });
+  }
+
+  final _$getBitmapImageAsyncAction =
+      AsyncAction('_UserControllerBase.getBitmapImage');
+
+  @override
+  Future<void> getBitmapImage() {
+    return _$getBitmapImageAsyncAction.run(() => super.getBitmapImage());
+  }
+
   final _$_UserControllerBaseActionController =
       ActionController(name: '_UserControllerBase');
 
@@ -39,9 +77,22 @@ mixin _$UserController on _UserControllerBase, Store {
   }
 
   @override
+  void setSelectedUser(User? user) {
+    final _$actionInfo = _$_UserControllerBaseActionController.startAction(
+        name: '_UserControllerBase.setSelectedUser');
+    try {
+      return super.setSelectedUser(user);
+    } finally {
+      _$_UserControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
-user: ${user}
+user: ${user},
+selectedUser: ${selectedUser},
+bitmaps: ${bitmaps}
     ''';
   }
 }

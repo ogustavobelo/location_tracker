@@ -8,8 +8,11 @@ part 'location_model.g.dart';
   explicitToJson: true,
 )
 class LocationModel extends Location {
-  LocationModel({required double latitude, required double longitude})
-      : super(latitude: latitude, longitude: longitude);
+  LocationModel(
+      {required double latitude,
+      required double longitude,
+      required double? heading})
+      : super(latitude: latitude, longitude: longitude, heading: heading);
 
   factory LocationModel.fromJson(Map json) => _$LocationModelFromJson(json);
   Map<String, dynamic> toJson() => _$LocationModelToJson(this);

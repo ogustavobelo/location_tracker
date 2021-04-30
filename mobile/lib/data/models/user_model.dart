@@ -7,7 +7,10 @@ import 'location_model.dart';
 part 'user_model.g.dart';
 
 @JsonSerializable(
-    anyMap: true, explicitToJson: true, fieldRename: FieldRename.snake)
+  anyMap: true,
+  explicitToJson: true,
+  fieldRename: FieldRename.snake,
+)
 class UserModel extends User {
   final LocationModel? location;
   UserModel({
