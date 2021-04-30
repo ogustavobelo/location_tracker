@@ -8,10 +8,6 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-// const (
-// 	dateTimeFormat = "02/Jan/2006 15:04:05"
-// )
-
 var wsChan = make(chan WebSocketPayload)
 var clients = make(map[WebSocketConnection]UserModel)
 

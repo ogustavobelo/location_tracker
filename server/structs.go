@@ -28,4 +28,5 @@ type UserModel struct {
 type LocationModel struct {
 	Latitutde float64 `json:"latitude"`
 	Longitude float64 `json:"longitude"`
+	Heading   float64 `json:"heading"`
 }
