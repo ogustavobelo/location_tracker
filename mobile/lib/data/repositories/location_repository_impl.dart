@@ -11,17 +11,24 @@ import 'package:location_tracker/domain/repositories/location_repository.dart';
 
 @Injectable(as: LocationRepository)
 class LocationRepositoryImpl implements LocationRepository {
+  final Location _locationInstance = Location();
+  LocationRepositoryImpl() {
+    _locationInstance.changeSettings(
+      accuracy: LocationAccuracy.high,
+    );
+  }
+
   @override
   Future<Either<Failure, entity.Location>> getCurrentLocation() async {
     try {
-      final LocationData currentLocation = await Location()
+      final LocationData currentLocation = await _locationInstance
           .getLocation()
           .timeout(Duration(seconds: 10),
               onTimeout: () => throw LocationFailure());
       return right(entity.Location(
-        latitude: currentLocation.latitude!,
-        longitude: currentLocation.longitude!,
-      ));
+          latitude: currentLocation.latitude!,
+          longitude: currentLocation.longitude!,
+          heading: currentLocation.heading!));
     } catch (e) {
       return left(LocationFailure());
     }
@@ -35,10 +42,10 @@ class LocationRepositoryImpl implements LocationRepository {
             permission == PermissionStatus.deniedForever;
       }
 
-      final _locationPub = Location();
-      PermissionStatus _permissionGranted = await _locationPub.hasPermission();
+      PermissionStatus _permissionGranted =
+          await _locationInstance.hasPermission();
       if (_validateDenied(_permissionGranted)) {
-        _permissionGranted = await _locationPub.requestPermission();
+        _permissionGranted = await _locationInstance.requestPermission();
         if (_validateDenied(_permissionGranted)) {
           return left(LocationFailure());
         }
@@ -71,10 +78,13 @@ class LocationRepositoryImpl implements LocationRepository {
   StreamController<entity.Location> onLocationChanged() {
     final StreamController<entity.Location> controller =
         StreamController<entity.Location>.broadcast();
+
     final Stream<entity.Location> stream =
-        Location().onLocationChanged.map((locationData) {
+        _locationInstance.onLocationChanged.map((locationData) {
       return entity.Location(
-          latitude: locationData.latitude!, longitude: locationData.longitude!);
+          latitude: locationData.latitude!,
+          longitude: locationData.longitude!,
+          heading: locationData.heading!);
     });
     controller.addStream(stream);
     return controller;

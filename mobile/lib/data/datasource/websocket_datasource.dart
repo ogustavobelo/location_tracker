@@ -2,6 +2,7 @@ import 'package:injectable/injectable.dart';
 import 'package:location_tracker/core/error/failures.dart';
 import 'package:location_tracker/core/flavors/flavors.dart';
 
+// ignore: unused_import
 import 'package:web_socket_channel/io.dart'
     if (dart.library.js) "package:web_socket_channel/web_socket_channel.dart";
 import 'package:web_socket_channel/web_socket_channel.dart';

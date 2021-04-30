@@ -10,6 +10,7 @@ import 'package:location_tracker/presentation/shared/components/hard_edge_button
 import 'package:location_tracker/presentation/shared/components/hard_edge_container.dart';
 import 'package:location_tracker/presentation/shared/components/location_loading_component.dart';
 import 'package:location_tracker/presentation/shared/controller/app_controller.dart';
+import 'package:location_tracker/presentation/shared/controller/user_controller.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -18,6 +19,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   final AppController _appController = getIt<AppController>();
+  final UserController _userController = getIt<UserController>();
 
   @override
   void initState() {
@@ -37,6 +39,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> _initPermissions() async {
     try {
       _appController.startLoading(message: 'Initing app...');
+      _userController.getBitmapImage();
       await _appController.requestServiceLocation();
       await _appController.requestPermission();
       _goToHome();
