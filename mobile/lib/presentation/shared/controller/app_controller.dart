@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 import 'package:location_tracker/core/error/exceptions.dart';
@@ -6,6 +8,8 @@ import 'package:location_tracker/core/logger/logger.dart';
 import 'package:location_tracker/core/success/success.dart';
 import 'package:location_tracker/domain/entities/location_entity.dart';
 import 'package:location_tracker/domain/usecases/get_current_location_usecase.dart';
+import 'package:location_tracker/domain/usecases/has_connectivity_stream_usecase.dart';
+import 'package:location_tracker/domain/usecases/has_connectivity_usecase.dart';
 import 'package:location_tracker/domain/usecases/request_location_service_usecase.dart';
 import 'package:location_tracker/domain/usecases/request_permission_usecase.dart';
 import 'package:mobx/mobx.dart';
@@ -20,12 +24,16 @@ abstract class _AppControllerBase with Store {
   final GetCurrentLocation getCurrentLocation;
   final RequestLocationService requestLocationServiceUseCase;
   final RequestPermission requestPermissionUseCase;
+  final OnConnectivityChangeUseCase onConnectivityChangeUseCase;
+  final HasConnectivity hasConnectivityUseCase;
 
   _AppControllerBase({
     required this.logger,
     required this.getCurrentLocation,
     required this.requestLocationServiceUseCase,
     required this.requestPermissionUseCase,
+    required this.onConnectivityChangeUseCase,
+    required this.hasConnectivityUseCase,
   });
 
   @observable
@@ -53,6 +61,23 @@ abstract class _AppControllerBase with Store {
   void stopLoading() {
     loading = false;
     loadingMessage = "";
+  }
+
+  Future<bool> hasConnectivity() async {
+    try {
+      final usecase = await hasConnectivityUseCase();
+      return usecase.fold(
+        (error) => throw error,
+        (result) => true,
+      );
+    } catch (e) {
+      logger.print("Error on setLocation $e", className: "AppController");
+      throw ConnectivityException("Has no internet connection");
+    }
+  }
+
+  StreamController<bool> onConnectivityChange() {
+    return onConnectivityChangeUseCase();
   }
 
   @action

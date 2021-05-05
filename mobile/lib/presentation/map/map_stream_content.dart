@@ -9,6 +9,7 @@ import 'package:location_tracker/domain/entities/websocket_payload_entity.dart';
 import 'package:location_tracker/presentation/shared/components/location_loading_component.dart';
 import 'package:location_tracker/presentation/shared/controller/user_controller.dart';
 import 'package:rxdart/rxdart.dart';
+import 'dart:math' as math;
 
 class MapStreamContent extends StatefulWidget {
   MapStreamContent({required this.onSelect});
@@ -44,9 +45,11 @@ class _MapStreamContentState extends State<MapStreamContent> {
       stream: _onLocationController.stream.throttleTime(Duration(seconds: 1)),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          print(
-              '${snapshot.data!.longitude} ${snapshot.data!.latitude} ${snapshot.data!.heading}');
-          _userController.updateLocation(snapshot.data!);
+          final double distance = _userController.lastPointDistance(
+              snapshot.data!.latitude, snapshot.data!.longitude);
+          if (distance > 3) {
+            _userController.updateLocation(snapshot.data!);
+          }
         }
         return StreamBuilder<WebSocketPayload>(
           stream: _onMessageController.stream,
@@ -54,13 +57,8 @@ class _MapStreamContentState extends State<MapStreamContent> {
             if (snapshot.connectionState == ConnectionState.waiting)
               return LocationLoading();
             if (!snapshot.hasData || snapshot.hasError) {
-              print(snapshot.error);
               return Text('Has no Available Data');
             } else {
-              if (snapshot.data!.connectedUsers.isEmpty) {
-                return Text('No Connected Users');
-              }
-
               return GoogleMap(
                   mapType: MapType.normal,
                   initialCameraPosition: CameraPosition(
@@ -77,6 +75,7 @@ class _MapStreamContentState extends State<MapStreamContent> {
                       markerId: MarkerId(user.uid!),
                       icon: _userController.bitmaps[user.vehicle]!,
                       onTap: () => widget.onSelect(user),
+                      rotation: user.location!.heading! - 90,
                       position: LatLng(
                           user.location!.latitude, user.location!.longitude),
                       infoWindow: InfoWindow(title: user.nick),

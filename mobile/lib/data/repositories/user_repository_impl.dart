@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:injectable/injectable.dart';
 import 'package:location_tracker/core/constants/websockets_events.dart';
 import 'package:location_tracker/data/datasource/websocket_datasource.dart';
@@ -64,6 +65,28 @@ class UserRepositoryImpl implements UserRepository {
         webSocketDS.channel.stream.map<WebSocketPayload>((event) {
       print(event);
       return WebSocketPayloadModel.fromJson(json.decode(event));
+    });
+    controller.addStream(stream);
+    return controller;
+  }
+
+  @override
+  Future<Either<Failure, Success>> hasConnectivity() async {
+    try {
+      final _connectivity = await (Connectivity().checkConnectivity());
+      return _connectivity != ConnectivityResult.none
+          ? right(VoidSuccess())
+          : left(ConnectivityFailure());
+    } catch (e) {
+      return left(ConnectivityFailure());
+    }
+  }
+
+  StreamController<bool> hasConnectivityStream() {
+    final StreamController<bool> controller =
+        StreamController<bool>.broadcast();
+    final stream = Connectivity().onConnectivityChanged.map((connectivity) {
+      return connectivity != ConnectivityResult.none;
     });
     controller.addStream(stream);
     return controller;

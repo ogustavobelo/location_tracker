@@ -9,4 +9,6 @@ class LocationFailure extends Failure {}
 
 class UserFailure extends Failure {}
 
+class ConnectivityFailure extends Failure {}
+
 class WebSocketFailure extends Failure {}

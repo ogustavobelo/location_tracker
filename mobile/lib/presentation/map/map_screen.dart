@@ -4,6 +4,7 @@ import 'package:location_tracker/core/data_injection/injectable.dart';
 import 'package:location_tracker/core/helpers/i18n_helper.dart';
 import 'package:location_tracker/domain/entities/user_entity.dart';
 import 'package:location_tracker/presentation/map/map_stream_content.dart';
+import 'package:location_tracker/presentation/shared/components/no_internet_banner.dart';
 import 'package:location_tracker/presentation/shared/components/user_tile_component.dart';
 import 'package:location_tracker/presentation/shared/controller/user_controller.dart';
 import 'package:show_up_animation/show_up_animation.dart';
@@ -41,29 +42,30 @@ class _MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     return Observer(builder: (context) {
       return Scaffold(
-          appBar: AppBar(
-            title: Text('MapScreen'),
-          ),
           body: Stack(
-            children: [
-              MapStreamContent(
-                onSelect: (user) => _selectUser(user),
-              ),
-              if (_userController.selectedUser != null) ...[
-                Container(
-                    alignment: Alignment.bottomCenter,
-                    child: ShowUpAnimation(
-                      animationDuration: Duration(milliseconds: 500),
-                      curve: Curves.ease,
-                      direction: Direction.vertical,
-                      child: UserTile(
-                        _userController.selectedUser!,
-                        onClose: () => _selectUser(null),
-                      ),
-                    )),
-              ]
-            ],
-          ));
+        children: [
+          MapStreamContent(
+            onSelect: (user) => _selectUser(user),
+          ),
+          if (_userController.selectedUser != null) ...[
+            Container(
+                alignment: Alignment.bottomCenter,
+                child: ShowUpAnimation(
+                  animationDuration: Duration(milliseconds: 500),
+                  curve: Curves.ease,
+                  direction: Direction.vertical,
+                  child: UserTile(
+                    _userController.selectedUser!,
+                    onClose: () => _selectUser(null),
+                  ),
+                )),
+          ],
+          Align(
+            alignment: Alignment.center,
+            child: NoInternetBanner(),
+          ),
+        ],
+      ));
     });
   }
 }

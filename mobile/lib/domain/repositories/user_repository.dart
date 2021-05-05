@@ -12,4 +12,7 @@ abstract class UserRepository {
   Future<Either<Failure, Success>> updateUser(User user);
   Future<Either<Failure, Success>> listUsers();
   StreamController<WebSocketPayload> onMessageController();
+
+  Future<Either<Failure, Success>> hasConnectivity();
+  StreamController<bool> hasConnectivityStream();
 }

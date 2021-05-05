@@ -75,6 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     try {
       _appController.startLoading(message: 'Creating User...');
+      await _appController.hasConnectivity();
       final currentLocation = await _getCurrentLocation();
       await _userController.createUser(
         params: UserCreateParams(
@@ -86,6 +87,8 @@ class _HomeScreenState extends State<HomeScreen> {
       );
       AppNotifications.showToastSuccess(_translate('success.userCreated'));
       _goToMap();
+    } on ConnectivityException catch (exception) {
+      AppNotifications.showToastError(exception.message);
     } on UserException catch (exception) {
       AppNotifications.showToastError(exception.message);
     } catch (exception) {

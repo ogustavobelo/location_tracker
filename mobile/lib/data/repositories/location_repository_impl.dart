@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 import 'package:location/location.dart';
 import 'package:location_tracker/core/error/failures.dart';
 import 'package:location_tracker/core/success/success.dart';
+import 'package:location_tracker/domain/entities/distance_between_entity.dart';
 import 'package:location_tracker/domain/entities/location_entity.dart'
     as entity;
 import 'package:location_tracker/domain/repositories/location_repository.dart';
@@ -88,5 +90,25 @@ class LocationRepositoryImpl implements LocationRepository {
     });
     controller.addStream(stream);
     return controller;
+  }
+
+  double distanceBetween(DistanceBetween distanceParams) {
+    var earthRadius = 6378137.0;
+    var dLat =
+        _toRadians(distanceParams.endLatitude - distanceParams.startLatitude);
+    var dLon =
+        _toRadians(distanceParams.endLongitude - distanceParams.startLongitude);
+
+    var a = pow(sin(dLat / 2), 2) +
+        pow(sin(dLon / 2), 2) *
+            cos(_toRadians(distanceParams.startLatitude)) *
+            cos(_toRadians(distanceParams.endLatitude));
+    var c = 2 * asin(sqrt(a));
+
+    return earthRadius * c;
+  }
+
+  double _toRadians(double degree) {
+    return degree * pi / 180;
   }
 }

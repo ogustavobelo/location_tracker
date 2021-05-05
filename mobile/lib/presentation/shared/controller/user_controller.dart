@@ -6,10 +6,13 @@ import 'package:injectable/injectable.dart';
 import 'package:location_tracker/core/constants/vehicle_const.dart';
 import 'package:location_tracker/core/error/exceptions.dart';
 import 'package:location_tracker/core/helpers/strings_helpers.dart';
+import 'package:location_tracker/domain/entities/distance_between_entity.dart';
 import 'package:location_tracker/domain/entities/location_entity.dart';
 import 'package:location_tracker/domain/entities/user_entity.dart';
 import 'package:location_tracker/domain/entities/websocket_payload_entity.dart';
 import 'package:location_tracker/domain/usecases/create_user_usecase.dart';
+import 'package:location_tracker/domain/usecases/distance_between_usecase.dart'
+    as uc;
 import 'package:location_tracker/domain/usecases/list_users_usecase.dart';
 import 'package:location_tracker/domain/usecases/on_location_changed_usecase.dart';
 import 'package:location_tracker/domain/usecases/on_message_usecase.dart';
@@ -31,6 +34,7 @@ abstract class _UserControllerBase with Store {
   final ListUsers listUsersUseCase;
   final OnMessageUseCase onMessageControllerUseCase;
   final OnLocationChangedUseCase onLocationChangedUseCase;
+  final uc.DistanceBetween distanceBetweenUseCase;
   _UserControllerBase({
     required this.logger,
     required this.createUserUseCase,
@@ -38,6 +42,7 @@ abstract class _UserControllerBase with Store {
     required this.onMessageControllerUseCase,
     required this.listUsersUseCase,
     required this.onLocationChangedUseCase,
+    required this.distanceBetweenUseCase,
   });
 
   @observable
@@ -105,6 +110,15 @@ abstract class _UserControllerBase with Store {
     );
   }
 
+  void updateMyUser(List<User> connectedUsers) {
+    for (var conUser in connectedUsers) {
+      if (user.uid == conUser.uid) {
+        setUser(conUser);
+        break;
+      }
+    }
+  }
+
   Future<void> updateLocation(Location location) async {
     try {
       print('update location called!');
@@ -132,6 +146,15 @@ abstract class _UserControllerBase with Store {
     for (var i = 0; i < vehiclesBitmaps.length; i++) {
       bitmaps[_vehicles[i]] = vehiclesBitmaps[i];
     }
+  }
+
+  double lastPointDistance(double startLatitude, double startLongitude) {
+    return distanceBetweenUseCase(
+        params: DistanceBetween(
+            startLatitude: startLatitude,
+            startLongitude: startLongitude,
+            endLatitude: user.location!.latitude,
+            endLongitude: user.location!.longitude));
   }
 
   static User get _anonymous {
