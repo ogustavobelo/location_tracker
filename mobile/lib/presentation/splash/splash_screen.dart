@@ -63,7 +63,9 @@ class _SplashScreenState extends State<SplashScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              if (_appController.loading) ...[LocationLoading()],
+              if (_appController.loading) ...[
+                Flexible(child: LocationLoading())
+              ],
               if (!_appController.locationServiceEnabled) ...[
                 _bannerMessage('You need to activate your Location Service')
               ] else if (!_appController.hasPermission) ...[

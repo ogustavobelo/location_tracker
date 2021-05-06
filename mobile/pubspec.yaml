@@ -36,6 +36,7 @@ dependencies:
   google_maps_flutter: ^2.0.3
   google_maps_flutter_web: ^0.3.0
   show_up_animation: ^2.0.0-nullsafety.0
+  flare_flutter: ^3.0.0
   
 dev_dependencies:
   flutter_test:
@@ -52,6 +53,7 @@ flutter:
     - assets/images/
     - assets/images/min/
     - assets/i18n/
+    - assets/animations/
   
   fonts:
     - family: PressStart

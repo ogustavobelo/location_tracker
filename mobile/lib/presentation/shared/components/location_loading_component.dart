@@ -1,4 +1,8 @@
+import 'package:flare_flutter/flare_actor.dart';
+import 'package:flare_flutter/flare_cache_builder.dart';
+import 'package:flare_flutter/provider/asset_flare.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class LocationLoading extends StatelessWidget {
   final String? message;
@@ -9,15 +13,17 @@ class LocationLoading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CircularProgressIndicator(),
-          if (message != null) ...[
-            const SizedBox(width: 8.0),
-            Text(message!),
-          ]
+      child: FlareCacheBuilder(
+        [
+          AssetFlare(
+              bundle: rootBundle, name: "assets/animations/pin_rotation.flr"),
         ],
+        builder: (context, loaded) {
+          return FlareActor(
+            'assets/animations/pin_rotation.flr',
+            animation: 'loading',
+          );
+        },
       ),
     );
   }

@@ -140,7 +140,7 @@ abstract class _UserControllerBase with Store {
     ];
     final vehiclesBitmaps = await Future.wait(_vehicles
         .map((vehicle) => BitmapDescriptor.fromAssetImage(
-            ImageConfiguration.empty, 'assets/images/min/$vehicle.png'))
+            ImageConfiguration.empty, 'assets/images/min/${vehicle}_min.png'))
         .toList());
 
     for (var i = 0; i < vehiclesBitmaps.length; i++) {

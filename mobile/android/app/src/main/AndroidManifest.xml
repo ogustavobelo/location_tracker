@@ -5,10 +5,11 @@
         android:icon="@mipmap/ic_launcher">
 
          <meta-data android:name="com.google.android.geo.API_KEY"
-               android:value="{{GOOGLE_MAPS_API_KEY}}"/>
+               android:value="{{APIKEY}}"/>
 
         <activity
             android:name=".MainActivity"
+
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"

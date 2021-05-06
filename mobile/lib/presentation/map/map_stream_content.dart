@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location_tracker/core/data_injection/injectable.dart';
@@ -9,7 +10,6 @@ import 'package:location_tracker/domain/entities/websocket_payload_entity.dart';
 import 'package:location_tracker/presentation/shared/components/location_loading_component.dart';
 import 'package:location_tracker/presentation/shared/controller/user_controller.dart';
 import 'package:rxdart/rxdart.dart';
-import 'dart:math' as math;
 
 class MapStreamContent extends StatefulWidget {
   MapStreamContent({required this.onSelect});
@@ -19,6 +19,7 @@ class MapStreamContent extends StatefulWidget {
 }
 
 class _MapStreamContentState extends State<MapStreamContent> {
+  var testHeading = 0.0;
   //controllers
   final _userController = getIt<UserController>();
   late final StreamController<WebSocketPayload> _onMessageController;
@@ -45,6 +46,7 @@ class _MapStreamContentState extends State<MapStreamContent> {
       stream: _onLocationController.stream.throttleTime(Duration(seconds: 1)),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
+          testHeading = snapshot.data!.heading!;
           final double distance = _userController.lastPointDistance(
               snapshot.data!.latitude, snapshot.data!.longitude);
           if (distance > 3) {
@@ -66,16 +68,15 @@ class _MapStreamContentState extends State<MapStreamContent> {
                         _userController.user.location!.longitude),
                     zoom: 18,
                   ),
-                  // onMapCreated: (GoogleMapControl;})ler controller) {
-                  //   _controller.complete(controller);
-                  // },
-
                   markers: snapshot.data!.connectedUsers.map((user) {
                     return Marker(
                       markerId: MarkerId(user.uid!),
-                      icon: _userController.bitmaps[user.vehicle]!,
+                      icon: kIsWeb
+                          ? BitmapDescriptor.defaultMarker
+                          : _userController.bitmaps[user.vehicle]!,
                       onTap: () => widget.onSelect(user),
-                      rotation: user.location!.heading! - 90,
+                      rotation: user.location!.heading!,
+                      anchor: Offset(0.5, 0.5),
                       position: LatLng(
                           user.location!.latitude, user.location!.longitude),
                       infoWindow: InfoWindow(title: user.nick),
