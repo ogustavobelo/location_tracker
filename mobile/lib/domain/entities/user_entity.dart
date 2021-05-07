@@ -9,6 +9,7 @@ class User extends Equatable {
   final Location? location;
   final String vehicle;
   final bool visible;
+  final bool isWeb;
   User({
     this.createdAt,
     this.uid,
@@ -16,6 +17,7 @@ class User extends Equatable {
     this.location,
     required this.vehicle,
     required this.visible,
+    required this.isWeb,
   });
 
   @override
@@ -28,6 +30,7 @@ class User extends Equatable {
     Location? location,
     String? vehicle,
     bool? visible,
+    bool? isWeb,
   }) {
     return User(
       createdAt: createdAt ?? this.createdAt,
@@ -36,6 +39,7 @@ class User extends Equatable {
       location: location ?? this.location,
       vehicle: vehicle ?? this.vehicle,
       visible: visible ?? this.visible,
+      isWeb: isWeb ?? this.isWeb,
     );
   }
 }

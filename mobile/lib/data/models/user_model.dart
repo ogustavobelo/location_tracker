@@ -20,6 +20,7 @@ class UserModel extends User {
     this.location,
     required String vehicle,
     required bool visible,
+    @JsonKey(name: 'is_web') required bool isWeb,
   }) : super(
           createdAt: createdAt,
           uid: uid,
@@ -27,6 +28,7 @@ class UserModel extends User {
           location: location,
           vehicle: vehicle,
           visible: visible,
+          isWeb: isWeb,
         );
 
   factory UserModel.fromJson(Map json) => _$UserModelFromJson(json);

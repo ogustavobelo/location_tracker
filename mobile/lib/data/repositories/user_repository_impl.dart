@@ -47,6 +47,20 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
+  Future<Either<Failure, Success>> deleteUser(User user) async {
+    try {
+      final data = {
+        'action': WSEvents.deleteUser,
+        'user': UserMapper.entityToModel(user).toJson()
+      };
+      webSocketDS.channel.sink.add(json.encode(data));
+      return right(VoidSuccess());
+    } catch (e) {
+      return left(UserFailure());
+    }
+  }
+
+  @override
   Future<Either<Failure, Success>> listUsers() async {
     try {
       final data = {'action': WSEvents.getUsers};

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:location_tracker/core/constants/fonts.dart';
@@ -6,10 +7,12 @@ import 'package:location_tracker/core/data_injection/injectable.dart';
 import 'package:location_tracker/core/error/exceptions.dart';
 import 'package:location_tracker/core/helpers/i18n_helper.dart';
 import 'package:location_tracker/core/notifications/notification_service.dart';
+import 'package:location_tracker/core/themes/colors.dart';
 import 'package:location_tracker/domain/entities/location_entity.dart';
 import 'package:location_tracker/presentation/home/components/vehicle_picker_component.dart';
 import 'package:location_tracker/presentation/map/map_screen.dart';
 import 'package:location_tracker/presentation/shared/components/hard_edge_button.dart';
+import 'package:location_tracker/presentation/shared/components/hard_edge_container.dart';
 import 'package:location_tracker/presentation/shared/components/hard_edge_textfield.dart';
 import 'package:location_tracker/presentation/shared/components/location_loading_component.dart';
 import 'package:location_tracker/presentation/shared/controller/app_controller.dart';
@@ -160,6 +163,26 @@ class _HomeScreenState extends State<HomeScreen> {
                       text: _translate("create").toUpperCase(),
                       onPressed: _createUser,
                     ),
+                    if (kIsWeb) ...[
+                      const SizedBox(height: 32.0),
+                      Row(
+                        children: [
+                          Expanded(child: SizedBox()),
+                          Expanded(
+                            child: HardEdgeContainer(
+                                width: 300,
+                                child: Container(
+                                  height: 56,
+                                  padding: const EdgeInsets.all(8.0),
+                                  color: AppColors.mediumRed,
+                                  child: Text(
+                                      'Vehicles on Web Version has no Rotation!'),
+                                )),
+                          ),
+                          Expanded(child: SizedBox()),
+                        ],
+                      ),
+                    ],
                   ],
                 ),
         );

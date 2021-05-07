@@ -18,6 +18,7 @@ UserModel _$UserModelFromJson(Map json) {
         : LocationModel.fromJson(json['location'] as Map),
     vehicle: json['vehicle'] as String,
     visible: json['visible'] as bool,
+    isWeb: json['is_web'] as bool,
   );
 }
 
@@ -27,5 +28,6 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
       'nick': instance.nick,
       'vehicle': instance.vehicle,
       'visible': instance.visible,
+      'is_web': instance.isWeb,
       'location': instance.location?.toJson(),
     };

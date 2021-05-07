@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location_tracker/core/constants/vehicle_const.dart';
 import 'package:location_tracker/core/data_injection/injectable.dart';
 import 'package:location_tracker/domain/entities/location_entity.dart';
 import 'package:location_tracker/domain/entities/user_entity.dart';
@@ -19,7 +20,6 @@ class MapStreamContent extends StatefulWidget {
 }
 
 class _MapStreamContentState extends State<MapStreamContent> {
-  var testHeading = 0.0;
   //controllers
   final _userController = getIt<UserController>();
   late final StreamController<WebSocketPayload> _onMessageController;
@@ -46,7 +46,6 @@ class _MapStreamContentState extends State<MapStreamContent> {
       stream: _onLocationController.stream.throttleTime(Duration(seconds: 1)),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          testHeading = snapshot.data!.heading!;
           final double distance = _userController.lastPointDistance(
               snapshot.data!.latitude, snapshot.data!.longitude);
           if (distance > 3) {
@@ -71,9 +70,7 @@ class _MapStreamContentState extends State<MapStreamContent> {
                   markers: snapshot.data!.connectedUsers.map((user) {
                     return Marker(
                       markerId: MarkerId(user.uid!),
-                      icon: kIsWeb
-                          ? BitmapDescriptor.defaultMarker
-                          : _userController.bitmaps[user.vehicle]!,
+                      icon: _userController.bitmaps[user.vehicle]!,
                       onTap: () => widget.onSelect(user),
                       rotation: user.location!.heading!,
                       anchor: Offset(0.5, 0.5),

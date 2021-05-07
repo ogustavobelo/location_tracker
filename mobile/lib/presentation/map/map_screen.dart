@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:location_tracker/core/data_injection/injectable.dart';
 import 'package:location_tracker/core/helpers/i18n_helper.dart';
+import 'package:location_tracker/core/themes/colors.dart';
 import 'package:location_tracker/domain/entities/user_entity.dart';
 import 'package:location_tracker/presentation/map/map_stream_content.dart';
 import 'package:location_tracker/presentation/shared/components/no_internet_banner.dart';
@@ -14,13 +15,27 @@ class MapScreen extends StatefulWidget {
   _MapScreenState createState() => _MapScreenState();
 }
 
-class _MapScreenState extends State<MapScreen> {
+class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
   final _userController = getIt<UserController>();
 
   @override
   void initState() {
-    _loadUsers();
+    Future.delayed(Duration(seconds: 3), () {
+      _loadUsers();
+    });
+    // WidgetsBinding.instance!.addObserver(this);
+
     super.initState();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive) {
+      print('====> Inactive');
+    } else if (state == AppLifecycleState.resumed) {
+      print('====> Resmed');
+    }
+    print('$state');
   }
 
   String _translate(String key) {
@@ -64,6 +79,14 @@ class _MapScreenState extends State<MapScreen> {
             alignment: Alignment.center,
             child: NoInternetBanner(),
           ),
+          Align(
+            alignment: Alignment.topRight,
+            child: SafeArea(
+              child: IconButton(
+                  icon: Icon(Icons.refresh, color: AppColors.primaryOrange),
+                  onPressed: _loadUsers),
+            ),
+          )
         ],
       ));
     });

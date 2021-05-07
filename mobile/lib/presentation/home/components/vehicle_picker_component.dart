@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:location_tracker/core/constants/vehicle_const.dart';
 import 'package:location_tracker/presentation/home/components/vehicle_button_component.dart';
@@ -15,7 +16,8 @@ class VehiclePicker extends StatelessWidget {
     VehiclesConst.car,
     VehiclesConst.policeCar,
     VehiclesConst.bus,
-    VehiclesConst.truck
+    VehiclesConst.truck,
+    if (kIsWeb) VehiclesConst.pin
   ];
   @override
   Widget build(BuildContext context) {

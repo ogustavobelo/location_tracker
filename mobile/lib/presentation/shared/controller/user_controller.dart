@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:injectable/injectable.dart';
@@ -11,6 +12,7 @@ import 'package:location_tracker/domain/entities/location_entity.dart';
 import 'package:location_tracker/domain/entities/user_entity.dart';
 import 'package:location_tracker/domain/entities/websocket_payload_entity.dart';
 import 'package:location_tracker/domain/usecases/create_user_usecase.dart';
+import 'package:location_tracker/domain/usecases/delete_user_usecase.dart';
 import 'package:location_tracker/domain/usecases/distance_between_usecase.dart'
     as uc;
 import 'package:location_tracker/domain/usecases/list_users_usecase.dart';
@@ -31,6 +33,7 @@ abstract class _UserControllerBase with Store {
   final Logger logger;
   final CreateUser createUserUseCase;
   final UpdateUser updateUserUseCase;
+  final DeleteUser deleteUserUseCase;
   final ListUsers listUsersUseCase;
   final OnMessageUseCase onMessageControllerUseCase;
   final OnLocationChangedUseCase onLocationChangedUseCase;
@@ -39,6 +42,7 @@ abstract class _UserControllerBase with Store {
     required this.logger,
     required this.createUserUseCase,
     required this.updateUserUseCase,
+    required this.deleteUserUseCase,
     required this.onMessageControllerUseCase,
     required this.listUsersUseCase,
     required this.onLocationChangedUseCase,
@@ -96,6 +100,7 @@ abstract class _UserControllerBase with Store {
       vehicle: params.vehicle,
       location: params.location,
       createdAt: DateTime.now(),
+      isWeb: kIsWeb,
     );
 
     final useCase = await createUserUseCase(params: _newUser);
@@ -121,7 +126,6 @@ abstract class _UserControllerBase with Store {
 
   Future<void> updateLocation(Location location) async {
     try {
-      print('update location called!');
       setUser(user.copyWith(location: location));
       final usecase = await updateUserUseCase(params: user);
       usecase.fold((l) => throw l, (r) => logger.print('location updated!'));
@@ -136,7 +140,8 @@ abstract class _UserControllerBase with Store {
       VehiclesConst.car,
       VehiclesConst.policeCar,
       VehiclesConst.bus,
-      VehiclesConst.truck
+      VehiclesConst.truck,
+      VehiclesConst.pin
     ];
     final vehiclesBitmaps = await Future.wait(_vehicles
         .map((vehicle) => BitmapDescriptor.fromAssetImage(
@@ -162,6 +167,7 @@ abstract class _UserControllerBase with Store {
       nick: 'Anonymous',
       vehicle: VehiclesConst.unknown,
       visible: true,
+      isWeb: true,
     );
   }
 }

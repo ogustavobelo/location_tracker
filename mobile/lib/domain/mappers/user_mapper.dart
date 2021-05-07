@@ -10,6 +10,7 @@ class UserMapper {
         visible: entity.visible,
         vehicle: entity.vehicle,
         createdAt: entity.createdAt,
+        isWeb: entity.isWeb,
       );
 
   static User modelToEntity(UserModel model) => User(
@@ -19,5 +20,6 @@ class UserMapper {
         visible: model.visible,
         vehicle: model.vehicle,
         createdAt: model.createdAt,
+        isWeb: model.isWeb,
       );
 }
