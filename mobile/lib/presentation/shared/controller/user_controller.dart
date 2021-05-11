@@ -89,6 +89,19 @@ abstract class _UserControllerBase with Store {
     );
   }
 
+  Future<void> deleteUser(Function(String) translate) async {
+    final usecase = await deleteUserUseCase(params: user);
+    usecase.fold(
+      (error) {
+        logger.print('Error on deleteUser $error');
+        throw UserException(translate('errors.unableList'));
+      },
+      (_) {
+        print('User List deleted!');
+      },
+    );
+  }
+
   Future<void> createUser({
     required UserCreateParams params,
     required Function(String) translate,
@@ -126,9 +139,13 @@ abstract class _UserControllerBase with Store {
 
   Future<void> updateLocation(Location location) async {
     try {
+      final double distance =
+          lastPointDistance(location.latitude, location.longitude);
       setUser(user.copyWith(location: location));
-      final usecase = await updateUserUseCase(params: user);
-      usecase.fold((l) => throw l, (r) => logger.print('location updated!'));
+      if (distance > 3) {
+        final usecase = await updateUserUseCase(params: user);
+        usecase.fold((l) => throw l, (r) => logger.print('location updated!'));
+      }
     } catch (e) {
       logger.print('Unable to update location $e');
     }
@@ -151,6 +168,18 @@ abstract class _UserControllerBase with Store {
     for (var i = 0; i < vehiclesBitmaps.length; i++) {
       bitmaps[_vehicles[i]] = vehiclesBitmaps[i];
     }
+  }
+
+  List<User> connectedUsersWithUserUpdated(List<User> connectedUsers) {
+    List<User> updatedUsers = [];
+    for (var connUser in connectedUsers) {
+      if (connUser.uid == user.uid) {
+        updatedUsers.add(user);
+      } else {
+        updatedUsers.add(connUser);
+      }
+    }
+    return updatedUsers;
   }
 
   double lastPointDistance(double startLatitude, double startLongitude) {

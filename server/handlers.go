@@ -70,8 +70,21 @@ func ListenToWebSocketChannel() {
 			updateUsersAndBroadcast()
 		case "get_users":
 			updateUsersAndBroadcast()
+		case "delete_user":
+			deleteUser(event)
+			updateUsersAndBroadcast()
 		}
 
+	}
+}
+
+func deleteUser(event WebSocketPayload) {
+	for con, client := range clients {
+		if client.Uid == event.User.Uid {
+			delete(clients, con)
+			delete(clients, event.Conn)
+			fmt.Println("User deleted: ", event.User)
+		}
 	}
 }
 

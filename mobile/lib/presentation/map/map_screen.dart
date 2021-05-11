@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:location_tracker/core/data_injection/injectable.dart';
@@ -9,6 +10,7 @@ import 'package:location_tracker/presentation/shared/components/no_internet_bann
 import 'package:location_tracker/presentation/shared/components/user_tile_component.dart';
 import 'package:location_tracker/presentation/shared/controller/user_controller.dart';
 import 'package:show_up_animation/show_up_animation.dart';
+import "package:universal_html/html.dart" as html;
 
 class MapScreen extends StatefulWidget {
   @override
@@ -20,11 +22,12 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
 
   @override
   void initState() {
-    Future.delayed(Duration(seconds: 3), () {
+    Future.delayed(Duration(seconds: kIsWeb ? 3 : 0), () {
       _loadUsers();
     });
-    // WidgetsBinding.instance!.addObserver(this);
 
+    _deleteWhenClose();
+    WidgetsBinding.instance!.addObserver(this);
     super.initState();
   }
 
@@ -33,13 +36,23 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
     if (state == AppLifecycleState.inactive) {
       print('====> Inactive');
     } else if (state == AppLifecycleState.resumed) {
-      print('====> Resmed');
+      _loadUsers();
+    } else if (state == AppLifecycleState.detached) {
+      _deleteUser();
     }
     print('$state');
   }
 
   String _translate(String key) {
     return I18nHelper.translate(context, key);
+  }
+
+  void _deleteWhenClose() {
+    if (kIsWeb) {
+      html.window.onBeforeUnload.listen((event) async {
+        _deleteUser();
+      });
+    }
   }
 
   void _loadUsers() async {
@@ -51,7 +64,10 @@ class _MapScreenState extends State<MapScreen> with WidgetsBindingObserver {
     // setState(() {});
   }
 
-  // Completer<GoogleMapController> _controller = Completer();
+  void _deleteUser() {
+    print('Leaving...');
+    _userController.deleteUser(_translate);
+  }
 
   @override
   Widget build(BuildContext context) {

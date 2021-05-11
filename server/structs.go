@@ -23,6 +23,7 @@ type UserModel struct {
 	Location  LocationModel `json:"location"`
 	Vehicle   string        `json:"vehicle"`
 	Visible   bool          `json:"visible"`
+	IsWeb     bool          `json:"is_web"`
 }
 
 type LocationModel struct {

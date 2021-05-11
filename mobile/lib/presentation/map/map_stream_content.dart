@@ -43,14 +43,10 @@ class _MapStreamContentState extends State<MapStreamContent> {
   Widget build(BuildContext context) {
     return StreamBuilder<Location>(
       initialData: _userController.user.location,
-      stream: _onLocationController.stream.throttleTime(Duration(seconds: 1)),
+      stream: _onLocationController.stream,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          final double distance = _userController.lastPointDistance(
-              snapshot.data!.latitude, snapshot.data!.longitude);
-          if (distance > 3) {
-            _userController.updateLocation(snapshot.data!);
-          }
+          _userController.updateLocation(snapshot.data!);
         }
         return StreamBuilder<WebSocketPayload>(
           stream: _onMessageController.stream,
@@ -67,7 +63,10 @@ class _MapStreamContentState extends State<MapStreamContent> {
                         _userController.user.location!.longitude),
                     zoom: 18,
                   ),
-                  markers: snapshot.data!.connectedUsers.map((user) {
+                  markers: _userController
+                      .connectedUsersWithUserUpdated(
+                          snapshot.data!.connectedUsers)
+                      .map((user) {
                     return Marker(
                       markerId: MarkerId(user.uid!),
                       icon: _userController.bitmaps[user.vehicle]!,
