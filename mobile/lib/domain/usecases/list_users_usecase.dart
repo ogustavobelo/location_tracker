@@ -12,7 +12,7 @@ class ListUsers implements UseCaseFuture<Either<Failure, Success>, void> {
     required this.userRepository,
   });
   @override
-  Future<Either<Failure, Success>> call({void params}) {
+  Future<Either<Failure, Success>> call({Object? params}) {
     return userRepository.listUsers();
   }
 }

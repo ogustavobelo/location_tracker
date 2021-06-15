@@ -13,7 +13,7 @@ class OnMessageUseCase
     required this.userRepository,
   });
   @override
-  StreamController<WebSocketPayload> call({void params}) {
+  StreamController<WebSocketPayload> call({Object? params}) {
     return userRepository.onMessageController();
   }
 }

@@ -15,6 +15,7 @@ import 'package:location_tracker/domain/usecases/create_user_usecase.dart';
 import 'package:location_tracker/domain/usecases/delete_user_usecase.dart';
 import 'package:location_tracker/domain/usecases/distance_between_usecase.dart'
     as uc;
+import 'package:location_tracker/domain/usecases/generate_uid_usecase.dart';
 import 'package:location_tracker/domain/usecases/list_users_usecase.dart';
 import 'package:location_tracker/domain/usecases/on_location_changed_usecase.dart';
 import 'package:location_tracker/domain/usecases/on_message_usecase.dart';
@@ -37,6 +38,7 @@ abstract class _UserControllerBase with Store {
   final ListUsers listUsersUseCase;
   final OnMessageUseCase onMessageControllerUseCase;
   final OnLocationChangedUseCase onLocationChangedUseCase;
+  final GenerateUID generateUIDUseCase;
   final uc.DistanceBetween distanceBetweenUseCase;
   _UserControllerBase({
     required this.logger,
@@ -47,6 +49,7 @@ abstract class _UserControllerBase with Store {
     required this.listUsersUseCase,
     required this.onLocationChangedUseCase,
     required this.distanceBetweenUseCase,
+    required this.generateUIDUseCase,
   });
 
   @observable
@@ -107,13 +110,13 @@ abstract class _UserControllerBase with Store {
     required Function(String) translate,
   }) async {
     final User _newUser = User(
-      uid: StringHelper.uId(),
+      uid: generateUIDUseCase(),
       visible: true,
       nick: params.name,
       vehicle: params.vehicle,
       location: params.location,
       createdAt: DateTime.now(),
-      isWeb: kIsWeb,
+      isWeb: false,
     );
 
     final useCase = await createUserUseCase(params: _newUser);

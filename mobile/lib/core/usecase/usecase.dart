@@ -3,5 +3,5 @@ abstract class UseCaseFuture<T, P> {
 }
 
 abstract class UseCase<T, P> {
-  T call({required P params});
+  T call({P params});
 }
