@@ -8,7 +8,7 @@ import 'package:location_tracker/domain/usecases/create_user_usecase.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
-import 'create_user_test.mocks.dart';
+import 'create_user_usecase_test.mocks.dart';
 
 @GenerateMocks([
   User,
