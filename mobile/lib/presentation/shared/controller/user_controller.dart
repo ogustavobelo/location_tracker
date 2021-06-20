@@ -1,12 +1,10 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:injectable/injectable.dart';
 import 'package:location_tracker/core/constants/vehicle_const.dart';
 import 'package:location_tracker/core/error/exceptions.dart';
-import 'package:location_tracker/core/helpers/strings_helpers.dart';
 import 'package:location_tracker/domain/entities/distance_between_entity.dart';
 import 'package:location_tracker/domain/entities/location_entity.dart';
 import 'package:location_tracker/domain/entities/user_entity.dart';

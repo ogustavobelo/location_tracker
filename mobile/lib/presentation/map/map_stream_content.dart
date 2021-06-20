@@ -1,16 +1,13 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location_tracker/core/constants/vehicle_const.dart';
 import 'package:location_tracker/core/data_injection/injectable.dart';
 import 'package:location_tracker/domain/entities/location_entity.dart';
 import 'package:location_tracker/domain/entities/user_entity.dart';
 import 'package:location_tracker/domain/entities/websocket_payload_entity.dart';
 import 'package:location_tracker/presentation/shared/components/location_loading_component.dart';
 import 'package:location_tracker/presentation/shared/controller/user_controller.dart';
-import 'package:rxdart/rxdart.dart';
 
 class MapStreamContent extends StatefulWidget {
   MapStreamContent({required this.onSelect});

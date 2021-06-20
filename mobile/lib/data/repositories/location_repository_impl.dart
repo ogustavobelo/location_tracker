@@ -13,11 +13,18 @@ import 'package:location_tracker/domain/repositories/location_repository.dart';
 
 @Injectable(as: LocationRepository)
 class LocationRepositoryImpl implements LocationRepository {
-  final Location _locationInstance = Location();
-  LocationRepositoryImpl() {
-    _locationInstance.changeSettings(
-      accuracy: LocationAccuracy.high,
-    );
+  final Location _locationInstanceInstance = Location();
+
+  bool _settingsUpdated = false;
+
+  Location get _locationInstance {
+    if (!_settingsUpdated) {
+      _locationInstanceInstance.changeSettings(
+        accuracy: LocationAccuracy.high,
+      );
+    }
+
+    return _locationInstanceInstance;
   }
 
   @override
