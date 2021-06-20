@@ -13,7 +13,7 @@ class DistanceBetween extends UseCase<double, entity.DistanceBetween> {
   final LocationRepository locationRepository;
 
   @override
-  double call({required entity.DistanceBetween params}) {
-    return locationRepository.distanceBetween(params);
+  double call({entity.DistanceBetween? params}) {
+    return locationRepository.distanceBetween(params!);
   }
 }

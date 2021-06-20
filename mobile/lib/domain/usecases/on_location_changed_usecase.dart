@@ -13,7 +13,7 @@ class OnLocationChangedUseCase
     required this.locationRepository,
   });
   @override
-  StreamController<Location> call({void params}) {
+  StreamController<Location> call({Object? params}) {
     return locationRepository.onLocationChanged();
   }
 }
